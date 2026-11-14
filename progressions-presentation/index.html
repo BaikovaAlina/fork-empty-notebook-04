@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Прогрессии — задачи перечневых олимпиад</title>
+<style>
+  :root {
+    --bg: #f4f6fb;
+    --card: #ffffff;
+    --ink: #1d2433;
+    --muted: #5d6679;
+    --accent: #3b5bdb;
+    --accent-2: #7048e8;
+    --ok: #2b8a3e;
+    --bad: #c92a2a;
+    --hint: #fff4e6;
+    --hint-ink: #8a4b08;
+    --sol: #e7f5ff;
+    --sol-ink: #0b4a75;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e3e7f0;
+    padding: 10px 16px 8px;
+  }
+  .topbar-row {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px; max-width: 900px; margin: 0 auto;
+    font-size: 14px; color: var(--muted);
+  }
+  .brand { font-weight: 600; color: var(--ink); }
+  .progress {
+    height: 6px; background: #e3e7f0; border-radius: 99px;
+    margin: 8px auto 0; max-width: 900px; overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    transition: width .35s ease;
+  }
+
+  /* ---------- deck ---------- */
+  .deck {
+    flex: 1;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 16px 120px;
+  }
+  .slide { display: none; animation: fade .3s ease; }
+  .slide.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: 0 6px 24px rgba(29,36,51,.07);
+    padding: clamp(18px, 4vw, 34px);
+    margin-bottom: 16px;
+  }
+  h1 { font-size: clamp(26px, 6vw, 38px); line-height: 1.2; margin: 0 0 12px; }
+  h2 { font-size: clamp(20px, 4.5vw, 26px); line-height: 1.3; margin: 0 0 6px; }
+  h3 { font-size: 18px; margin: 18px 0 8px; }
+  p { margin: 0 0 12px; }
+  ul, ol { padding-left: 22px; margin: 0 0 12px; }
+  li { margin-bottom: 6px; }
+  .lead { font-size: clamp(16px, 3.6vw, 19px); color: var(--muted); }
+  sup, sub { font-size: .75em; }
+
+  /* title slide */
+  .title-card {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    color: #fff;
+  }
+  .title-card .lead { color: rgba(255,255,255,.9); }
+  .title-card .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .chip {
+    background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35);
+    border-radius: 99px; padding: 4px 12px; font-size: 14px;
+  }
+
+  /* task slide */
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .badge {
+    font-size: 13px; padding: 3px 10px; border-radius: 99px;
+    background: #edf2ff; color: var(--accent); font-weight: 600;
+  }
+  .src { font-size: 13px; color: var(--muted); }
+  .cond {
+    font-size: clamp(16px, 3.6vw, 18px);
+    background: #f8f9fc; border-left: 4px solid var(--accent);
+    padding: 14px 16px; border-radius: 10px; margin: 14px 0;
+  }
+  .cond p:last-child { margin-bottom: 0; }
+  .answer-box { margin-top: 18px; }
+  .answer-box label { display: block; font-weight: 600; margin-bottom: 6px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .row input {
+    flex: 1 1 220px; min-width: 0;
+    font-size: 17px; padding: 11px 14px;
+    border: 2px solid #d0d7e6; border-radius: 10px; outline: none;
+    font-family: inherit;
+  }
+  .row input:focus { border-color: var(--accent); }
+  .hint-text { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .feedback { min-height: 1.5em; font-weight: 600; margin: 8px 0 0; }
+  .feedback.ok { color: var(--ok); }
+  .feedback.bad { color: var(--bad); }
+
+  button {
+    font-family: inherit; font-size: 15px; cursor: pointer;
+    border: 0; border-radius: 10px; padding: 10px 16px;
+    transition: transform .08s ease, background .2s, opacity .2s;
+  }
+  button:active { transform: scale(.97); }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #3450c8; }
+  .btn-ghost { background: #eef1f8; color: var(--ink); }
+  .btn-ghost:hover { background: #e1e6f2; }
+  .btn-hint { background: var(--hint); color: var(--hint-ink); }
+  .btn-sol { background: var(--sol); color: var(--sol-ink); }
+  .btn-hint:hover, .btn-sol:hover { filter: brightness(.97); }
+  button:disabled { opacity: .5; cursor: default; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+
+  .panel {
+    border-radius: 12px; padding: 14px 18px; margin-top: 14px;
+    animation: fade .25s ease;
+  }
+  .panel.hint { background: var(--hint); color: var(--hint-ink); }
+  .panel.sol { background: var(--sol); color: var(--sol-ink); }
+  .panel h4 { margin: 0 0 6px; font-size: 16px; }
+  .panel p, .panel li { color: inherit; }
+  .panel[hidden] { display: none; }
+
+  /* summary */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid #e6eaf2; vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 13px; }
+  .mark-ok { color: var(--ok); font-weight: 700; }
+  .mark-bad { color: var(--bad); font-weight: 700; }
+  .mark-none { color: var(--muted); }
+  .score { font-size: 22px; font-weight: 700; margin: 6px 0 14px; }
+  .note { font-size: 13px; color: var(--muted); }
+
+  /* bottom nav */
+  .controls {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid #e3e7f0;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  }
+  .controls-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  }
+  .controls button { min-width: 130px; }
+  .dots { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%; padding: 0; min-width: 0;
+    background: #cfd6e6;
+  }
+  .dot.active { background: var(--accent); transform: scale(1.25); }
+  .dot.done { background: #8ea3e8; }
+
+  @media (max-width: 640px) {
+    .controls button { min-width: 0; flex: 1; padding: 12px 10px; }
+    .dots { display: none; }
+    .topbar-row { font-size: 13px; }
+    th, td { padding: 7px 4px; font-size: 13px; }
+    .deck { padding-bottom: 130px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-row">
+    <span class="brand">Прогрессии · задачи перечневых олимпиад</span>
+    <span id="counter">1 / 1</span>
+  </div>
+  <div class="progress"><div class="progress-bar" id="bar"></div></div>
+</header>
+
+<main class="deck" id="deck"></main>
+
+<nav class="controls">
+  <div class="controls-inner">
+    <button class="btn-ghost" id="prev">← Назад</button>
+    <div class="dots" id="dots"></div>
+    <button class="btn-primary" id="next">Вперёд →</button>
+  </div>
+</nav>
+
+<script>
+/* =========================================================
+   ДАННЫЕ: задачи, источники, ответы, подсказки и решения
+   ========================================================= */
+
+const TASKS = [
+  {
+    id: 1,
+    title: "Сумма шести и четырёх членов",
+    level: "★☆☆",
+    source: "Открытая олимпиада школьников по математике, 2020, 10.1 (по сборнику И. В. Яковлева)",
+    condition: `<p>Сумма первых шести членов арифметической прогрессии равна сумме следующих четырёх членов. Найдите отношение <i>a</i><sub>16</sub> / <i>a</i><sub>1</sub>.</p>
+                <p class="hint-text">Нумерация членов начинается с <i>a</i><sub>1</sub>.</p>`,
+    placeholder: "Например: 3",
+    answerLabel: "3",
+    check: v => matchNumbers(v, [3]),
+    hint: `<p>Сумма первых шести членов равна сумме членов с 7-го по 10-й, значит, сумма первых десяти членов вдвое больше суммы первых шести.</p>
+           <p>Выразите <i>S</i><sub>10</sub> и <i>S</i><sub>6</sub> через <i>a</i><sub>1</sub> и <i>d</i>.</p>`,
+    solution: `<p><b>Шаг 1.</b> Из условия <i>S</i><sub>6</sub> = <i>a</i><sub>7</sub> + <i>a</i><sub>8</sub> + <i>a</i><sub>9</sub> + <i>a</i><sub>10</sub>, поэтому <i>S</i><sub>10</sub> = 2<i>S</i><sub>6</sub>.</p>
+               <p><b>Шаг 2.</b> <i>S</i><sub>10</sub> = 5(2<i>a</i><sub>1</sub> + 9<i>d</i>), <i>S</i><sub>6</sub> = 3(2<i>a</i><sub>1</sub> + 5<i>d</i>). Тогда 10<i>a</i><sub>1</sub> + 45<i>d</i> = 12<i>a</i><sub>1</sub> + 30<i>d</i>, откуда 2<i>a</i><sub>1</sub> = 15<i>d</i>, то есть <i>a</i><sub>1</sub> = 7,5<i>d</i>.</p>
+               <p><b>Шаг 3.</b> <i>a</i><sub>16</sub> = <i>a</i><sub>1</sub> + 15<i>d</i> = 22,5<i>d</i>, значит <i>a</i><sub>16</sub> / <i>a</i><sub>1</sub> = 22,5 / 7,5 = <b>3</b>.</p>
+               <p class="hint-text">Ответ: 3. (Случай <i>a</i><sub>1</sub> = 0 даёт нулевую прогрессию, где отношение не определено.)</p>`
+  },
+  {
+    id: 2,
+    title: "Прогрессия с «индексом из члена»",
+    level: "★☆☆",
+    source: "Олимпиада «Покори Воробьёвы горы!», 2020, 10 класс, вариант 4-1, задача 1",
+    condition: `<p>В возрастающей арифметической прогрессии {<i>b<sub>i</sub></i>} дано: <i>b</i><sub>1</sub> = 1, <i>b</i><sub><i>b</i><sub>2</sub></sub> = 10.</p>
+                <p>Найдите <i>b<sub>n</sub></i> с номером <i>n</i> = <i>b</i><sub><i>b</i><sub>3</sub></sub>.</p>`,
+    placeholder: "Например: 19",
+    answerLabel: "19",
+    check: v => matchNumbers(v, [19]),
+    hint: `<p>Запишите <i>b<sub>i</sub></i> = 1 + (<i>i</i> − 1)<i>d</i>. Сначала найдите <i>d</i> из условия <i>b</i><sub><i>b</i><sub>2</sub></sub> = 10.</p>`,
+    solution: `<p><b>Шаг 1.</b> <i>b</i><sub>2</sub> = 1 + <i>d</i>. Тогда <i>b</i><sub><i>b</i><sub>2</sub></sub> = 1 + (<i>b</i><sub>2</sub> − 1)<i>d</i> = 1 + <i>d</i><sup>2</sup> = 10, откуда <i>d</i><sup>2</sup> = 9.</p>
+               <p><b>Шаг 2.</b> Прогрессия возрастающая, значит <i>d</i> &gt; 0, и <i>d</i> = 3.</p>
+               <p><b>Шаг 3.</b> <i>b</i><sub>2</sub> = 4, <i>b</i><sub>3</sub> = 7. Тогда <i>n</i> = <i>b</i><sub>3</sub> = 7, и <i>b</i><sub>7</sub> = 1 + 6·3 = <b>19</b>.</p>
+               <p class="hint-text">Проверка: <i>b</i><sub>4</sub> = 10 = <i>b</i><sub><i>b</i><sub>2</sub></sub> ✓</p>`
+  },
+  {
+    id: 3,
+    title: "Геометрическая: средние арифметические",
+    level: "★★☆",
+    source: "Олимпиада «Покори Воробьёвы горы!», 2020, 10–11 класс, вариант 1, задача 1",
+    condition: `<p>Геометрическая прогрессия состоит из шести членов. Среднее арифметическое её первых четырёх членов равно 15, а среднее арифметическое последних четырёх членов равно 60.</p>
+                <p>Чему может быть равен последний член прогрессии? Укажите все значения.</p>`,
+    placeholder: "Например: 128; 384",
+    answerLabel: "128 или 384",
+    check: v => matchNumbers(v, [128, 384]),
+    hint: `<p>Сумма последних четырёх членов — это сумма первых четырёх, умноженная на <i>q</i><sup>2</sup>. Найдите <i>q</i>, затем первый член.</p>`,
+    solution: `<p><b>Шаг 1.</b> Сумма первых четырёх членов: 4·15 = 60; сумма последних четырёх: 4·60 = 240.</p>
+               <p><b>Шаг 2.</b> Последние четыре члена (<i>b</i><sub>3</sub>…<i>b</i><sub>6</sub>) получаются из первых четырёх (<i>b</i><sub>1</sub>…<i>b</i><sub>4</sub>) умножением на <i>q</i><sup>2</sup>. Значит, 240 = 60<i>q</i><sup>2</sup>, <i>q</i><sup>2</sup> = 4, <i>q</i> = ±2.</p>
+               <p><b>Шаг 3.</b> Сумма первых четырёх: <i>b</i><sub>1</sub>(1 + <i>q</i> + <i>q</i><sup>2</sup> + <i>q</i><sup>3</sup>) = 60.</p>
+               <ul>
+                 <li>При <i>q</i> = 2: 15<i>b</i><sub>1</sub> = 60, <i>b</i><sub>1</sub> = 4. Последний член <i>b</i><sub>6</sub> = 4·2<sup>5</sup> = <b>128</b>.</li>
+                 <li>При <i>q</i> = −2: −5<i>b</i><sub>1</sub> = 60, <i>b</i><sub>1</sub> = −12. Последний член <i>b</i><sub>6</sub> = −12·(−2)<sup>5</sup> = <b>384</b>.</li>
+               </ul>
+               <p class="hint-text">Проверка для <i>q</i> = −2: −12, 24, −48, 96, −192, 384. Первые четыре: сумма 60, последние четыре: 240 ✓</p>`
+  },
+  {
+    id: 4,
+    title: "Уравнение на члены прогрессии",
+    level: "★★☆",
+    source: "Олимпиада «Физтех», 2024, 10 класс, вариант 5, задача 1",
+    condition: `<p>Третий член арифметической прогрессии равен 3<i>x</i> + 3, пятый член равен (<i>x</i><sup>2</sup> + 2<i>x</i>)<sup>2</sup>, а девятый равен 3<i>x</i><sup>2</sup>.</p>
+                <p>Найдите <i>x</i>. Укажите все значения.</p>`,
+    placeholder: "Например: -1; -1+√3; -1-√3",
+    answerLabel: "−1; −1 ± √3",
+    check: v => matchNumbers(v, [-1, -1 + Math.sqrt(3), -1 - Math.sqrt(3)]),
+    hint: `<p>Для членов прогрессии с номерами 3, 5, 9 выполняется соотношение 3<i>a</i><sub>5</sub> = 2<i>a</i><sub>3</sub> + <i>a</i><sub>9</sub>. Замените t = <i>x</i><sup>2</sup> + 2<i>x</i>.</p>`,
+    solution: `<p><b>Шаг 1.</b> Пусть <i>d</i> — разность. Тогда <i>a</i><sub>5</sub> = <i>a</i><sub>3</sub> + 2<i>d</i>, <i>a</i><sub>9</sub> = <i>a</i><sub>3</sub> + 6<i>d</i>, откуда 2<i>a</i><sub>3</sub> + <i>a</i><sub>9</sub> = 3<i>a</i><sub>3</sub> + 6<i>d</i> = 3<i>a</i><sub>5</sub>.</p>
+               <p><b>Шаг 2.</b> Получаем 2(3<i>x</i> + 3) + 3<i>x</i><sup>2</sup> = 3(<i>x</i><sup>2</sup> + 2<i>x</i>)<sup>2</sup>. Разделив на 3: <i>x</i><sup>2</sup> + 2<i>x</i> + 2 = (<i>x</i><sup>2</sup> + 2<i>x</i>)<sup>2</sup>.</p>
+               <p><b>Шаг 3.</b> Пусть t = <i>x</i><sup>2</sup> + 2<i>x</i>. Тогда t + 2 = t², t² − t − 2 = 0, (t − 2)(t + 1) = 0.</p>
+               <ul>
+                 <li>t = −1: <i>x</i><sup>2</sup> + 2<i>x</i> + 1 = 0, <i>x</i> = −1.</li>
+                 <li>t = 2: <i>x</i><sup>2</sup> + 2<i>x</i> − 2 = 0, <i>x</i> = −1 ± √3.</li>
+               </ul>
+               <p class="hint-text">Ответ: <b>x = −1, x = −1 − √3, x = −1 + √3</b>.</p>`
+  },
+  {
+    id: 5,
+    title: "Сумма каждого третьего члена",
+    level: "★★☆",
+    source: "Олимпиада школьников, муниципальный этап (Москва), 2024/25, 10 класс, задача 10.1",
+    condition: `<p>Действительные числа <i>a</i><sub>1</sub>, <i>a</i><sub>2</sub>, …, <i>a</i><sub>90</sub> образуют арифметическую прогрессию.</p>
+                <p>Чему равна сумма <i>a</i><sub>2</sub> + <i>a</i><sub>5</sub> + <i>a</i><sub>8</sub> + … + <i>a</i><sub>89</sub>, если <i>a</i><sub>1</sub> + <i>a</i><sub>2</sub> + … + <i>a</i><sub>90</sub> = 3000?</p>`,
+    placeholder: "Например: 1000",
+    answerLabel: "1000",
+    check: v => matchNumbers(v, [1000]),
+    hint: `<p>Сумма двух членов, одинаково удалённых от концов (<i>a</i><sub>2</sub> и <i>a</i><sub>89</sub>, <i>a</i><sub>1</sub> и <i>a</i><sub>90</sub>), одна и та же: <i>a</i><sub>2</sub> + <i>a</i><sub>89</sub> = <i>a</i><sub>1</sub> + <i>a</i><sub>90</sub>.</p>`,
+    solution: `<p><b>Шаг 1.</b> В арифметической прогрессии <i>a</i><sub><i>k</i></sub> + <i>a</i><sub><i>m</i></sub> = <i>a</i><sub><i>p</i></sub> + <i>a</i><sub><i>q</i></sub>, если <i>k</i> + <i>m</i> = <i>p</i> + <i>q</i>. Поэтому <i>a</i><sub>2</sub> + <i>a</i><sub>89</sub> = <i>a</i><sub>1</sub> + <i>a</i><sub>90</sub> (сумма номеров 91).</p>
+               <p><b>Шаг 2.</b> Полная сумма: (<i>a</i><sub>1</sub> + <i>a</i><sub>90</sub>)/2 · 90 = 45(<i>a</i><sub>1</sub> + <i>a</i><sub>90</sub>) = 3000, значит <i>a</i><sub>1</sub> + <i>a</i><sub>90</sub> = 200/3.</p>
+               <p><b>Шаг 3.</b> Числа <i>a</i><sub>2</sub>, <i>a</i><sub>5</sub>, …, <i>a</i><sub>89</sub> — это 30 членов арифметической прогрессии (номера 2, 5, …, 89). Их сумма: (<i>a</i><sub>2</sub> + <i>a</i><sub>89</sub>)/2 · 30 = 15(<i>a</i><sub>1</sub> + <i>a</i><sub>90</sub>) = 15 · 200/3 = <b>1000</b>.</p>`
+  },
+  {
+    id: 6,
+    title: "Две прогрессии с одинаковыми суммами",
+    level: "★★☆",
+    source: "Задача 76420 из банка олимпиадных задач problems.ru (9–10 класс)",
+    condition: `<p>Составьте две прогрессии: арифметическую и геометрическую, каждую из четырёх членов, так, чтобы при сложении одноимённых членов получались числа 27, 27, 39, 87.</p>
+                <p class="hint-text">Введите ответ в виде: <i>a</i><sub>1</sub>; <i>d</i>; <i>b</i><sub>1</sub>; <i>q</i>.</p>`,
+    placeholder: "Например: 24; -6; 3; 3",
+    answerLabel: "24; −6; 3; 3",
+    check: v => matchNumbers(v, [24, -6, 3, 3]),
+    hint: `<p>Обозначьте AP: <i>a</i>, <i>a</i>+<i>d</i>, <i>a</i>+2<i>d</i>, <i>a</i>+3<i>d</i>, GP: <i>b</i>, <i>bq</i>, <i>bq</i><sup>2</sup>, <i>bq</i><sup>3</sup>. Вычитайте соседние уравнения системы.</p>`,
+    solution: `<p><b>Шаг 1.</b> Система: <i>a</i> + <i>b</i> = 27, <i>a</i> + <i>d</i> + <i>bq</i> = 27, <i>a</i> + 2<i>d</i> + <i>bq</i><sup>2</sup> = 39, <i>a</i> + 3<i>d</i> + <i>bq</i><sup>3</sup> = 87.</p>
+               <p><b>Шаг 2.</b> Вычитая соседние уравнения, получаем: <i>d</i> + <i>b</i>(<i>q</i> − 1) = 0, <i>d</i> + <i>bq</i>(<i>q</i> − 1) = 12, <i>d</i> + <i>bq</i><sup>2</sup>(<i>q</i> − 1) = 48.</p>
+               <p><b>Шаг 3.</b> Из первого: <i>b</i>(<i>q</i> − 1) = −<i>d</i>. Подставляя во второе и третье: <i>d</i>(1 − <i>q</i>) = 12, <i>d</i>(1 − <i>q</i><sup>2</sup>) = 48.</p>
+               <p><b>Шаг 4.</b> Делим второе на первое: 1 + <i>q</i> = 4, <i>q</i> = 3. Тогда <i>d</i> = −6, и из <i>b</i>·2 = 6: <i>b</i> = 3, <i>a</i> = 27 − 3 = 24.</p>
+               <p class="hint-text">Прогрессии: 24, 18, 12, 6 и 3, 9, 27, 81. Суммы по членам: 27, 27, 39, 87 ✓</p>`
+  },
+  {
+    id: 7,
+    title: "Ряд без квадратов и кубов (10 класс)",
+    level: "★★★",
+    source: "Олимпиада «Покори Воробьёвы горы!», 2022, 10 класс, 2 тур (заключительный)",
+    condition: `<p>Какое число окажется на 2022-м месте в бесконечной последовательности</p>
+                <p style="text-align:center;font-size:18px">12, 13, 14, 15, 16, 17, …</p>
+                <p>если в ней удалить все квадраты и кубы каких-либо натуральных чисел (то есть удалить числа 16 = 4², 25 = 5², 27 = 3³, …)?</p>`,
+    placeholder: "Например: 2083",
+    answerLabel: "2083",
+    check: v => matchNumbers(v, [2083]),
+    hint: `<p>Пусть искомое число — <i>N</i>. Среди чисел от 12 до <i>N</i> всего <i>N</i> − 11 штук; из них нужно вычесть удалённые. Найдите, сколько квадратов и кубов лежит в этом отрезке (не забудьте, что некоторые числа — одновременно квадраты и кубы).</p>`,
+    solution: `<p><b>Шаг 1.</b> Пусть ответ — <i>N</i>. На отрезке [12; <i>N</i>] стоят <i>N</i> − 11 чисел, и из них удалено некоторое количество.</p>
+               <p><b>Шаг 2.</b> Квадраты от 12 до ~2083: 4², 5², …, 45² — это 42 числа (46² = 2116 уже больше). Кубы: 3³, 4³, …, 12³ = 1728 — это 10 чисел (13³ = 2197 больше).</p>
+               <p><b>Шаг 3.</b> Числа, которые одновременно квадраты и кубы (шестые степени): 64 = 2⁶ и 729 = 3⁶. Их учли дважды, поэтому вычитаем 2. Всего удалено: 42 + 10 − 2 = 50.</p>
+               <p><b>Шаг 4.</b> Должно быть (<i>N</i> − 11) − 50 = 2022, откуда <i>N</i> = 2083.</p>
+               <p><b>Проверка.</b> 2083 не является ни квадратом (45² = 2025, 46² = 2116), ни кубом (12³ = 1728, 13³ = 2197). Ответ: <b>2083</b>.</p>`
+  },
+  {
+    id: 8,
+    title: "Бесконечно убывающая геометрическая",
+    level: "★★★",
+    source: "Задача №79925 из каталога олимпиадных задач «Школково» (первоисточник не указан)",
+    condition: `<p>Найдите первый член и знаменатель бесконечно убывающей геометрической прогрессии, если:</p>
+                <ul>
+                  <li>отношение суммы кубов всех её членов к сумме всех её членов равно 48/7;</li>
+                  <li>отношение суммы четвёртых степеней членов к сумме квадратов членов равно 144/17.</li>
+                </ul>
+                <p class="hint-text">Введите ответ в виде: <i>b</i><sub>1</sub>; <i>q</i>. Например: 3; 1/4</p>`,
+    placeholder: "Например: 3; 1/4",
+    answerLabel: "b₁ = ±3, q = 1/4",
+    check: v => {
+      const n = parseList(v);
+      if (!n || n.length !== 2) return false;
+      return approx(n[1], 0.25) && (approx(n[0], 3) || approx(n[0], -3));
+    },
+    hint: `<p>Кубы, четвёртые степени и квадраты членов тоже образуют геометрические прогрессии. Запишите суммы через <i>b</i><sub>1</sub> и <i>q</i> и поделите одно отношение на другое.</p>`,
+    solution: `<p><b>Шаг 1.</b> Суммы бесконечно убывающих прогрессий (|<i>q</i>| &lt; 1):<br>
+               Σ<i>b<sub>n</sub></i> = <i>b</i><sub>1</sub>/(1 − <i>q</i>), Σ<i>b<sub>n</sub></i><sup>3</sup> = <i>b</i><sub>1</sub><sup>3</sup>/(1 − <i>q</i><sup>3</sup>), Σ<i>b<sub>n</sub></i><sup>4</sup> = <i>b</i><sub>1</sub><sup>4</sup>/(1 − <i>q</i><sup>4</sup>), Σ<i>b<sub>n</sub></i><sup>2</sup> = <i>b</i><sub>1</sub><sup>2</sup>/(1 − <i>q</i><sup>2</sup>).</p>
+               <p><b>Шаг 2.</b> Первое отношение: <i>b</i><sub>1</sub><sup>2</sup>/(1 + <i>q</i> + <i>q</i><sup>2</sup>) = 48/7. Второе: <i>b</i><sub>1</sub><sup>2</sup>/(1 + <i>q</i><sup>2</sup>) = 144/17.</p>
+               <p><b>Шаг 3.</b> Делим первое на второе: (1 + <i>q</i><sup>2</sup>)/(1 + <i>q</i> + <i>q</i><sup>2</sup>) = 17/21. Отсюда 21 + 21<i>q</i><sup>2</sup> = 17 + 17<i>q</i> + 17<i>q</i><sup>2</sup>, то есть 4<i>q</i><sup>2</sup> − 17<i>q</i> + 4 = 0, корни <i>q</i> = 4 или <i>q</i> = 1/4.</p>
+               <p><b>Шаг 4.</b> Так как |<i>q</i>| &lt; 1, берём <i>q</i> = 1/4. Тогда <i>b</i><sub>1</sub><sup>2</sup> = (48/7)(1 + 1/4 + 1/16) = (48/7)(21/16) = 9, <i>b</i><sub>1</sub> = ±3.</p>
+               <p class="hint-text">Ответ: <b>b₁ = 3 или b₁ = −3, q = 1/4</b>.</p>`
+  },
+  {
+    id: 9,
+    title: "Ряд без квадратов и кубов (11 класс)",
+    level: "★★★",
+    source: "Олимпиада «Покори Воробьёвы горы!», 2022, 11 класс, 2 тур (заключительный)",
+    condition: `<p>Какое число окажется на 2022-м месте в бесконечной последовательности</p>
+                <p style="text-align:center;font-size:18px">6, 7, 8, 9, 10, …</p>
+                <p>если в ней удалить все квадраты и кубы каких-либо натуральных чисел (то есть удалить числа 8 = 2³, 9 = 3², 16 = 4², …)?</p>`,
+    placeholder: "Например: 2079",
+    answerLabel: "2079",
+    check: v => matchNumbers(v, [2079]),
+    hint: `<p>Аналогично предыдущей задаче: от 6 до <i>N</i> всего <i>N</i> − 5 чисел. Посчитайте квадраты и кубы на этом отрезке, учитывая «двойные» (шестые степени).</p>`,
+    solution: `<p><b>Шаг 1.</b> На отрезке [6; <i>N</i>] стоит <i>N</i> − 5 чисел.</p>
+               <p><b>Шаг 2.</b> Квадраты от 6 до ~2079: 3², …, 45² — это 43 числа. Кубы: 2³ = 8, 3³, …, 12³ = 1728 — это 11 чисел.</p>
+               <p><b>Шаг 3.</b> Двойные (квадраты и кубы одновременно): 64 = 2⁶ и 729 = 3⁶. Всего удалено: 43 + 11 − 2 = 52.</p>
+               <p><b>Шаг 4.</b> (<i>N</i> − 5) − 52 = 2022, откуда <i>N</i> = 2079.</p>
+               <p><b>Проверка.</b> 2079 — не квадрат (45² = 2025, 46² = 2116) и не куб (12³ = 1728, 13³ = 2197). Ответ: <b>2079</b>.</p>`
+  },
+  {
+    id: 10,
+    title: "Натуральность двадцатого члена",
+    level: "★★★★",
+    source: "Московская математическая олимпиада, 2001 (64-я ММО), 11 класс, задача 2 (problems.ru, задача 105115)",
+    condition: `<p>Дана геометрическая прогрессия. Известно, что её первый, десятый и тридцатый члены — натуральные числа.</p>
+                <p>Верно ли, что её двадцатый член также натуральный?</p>
+                <p class="hint-text">Ответ запишите словами: «да» или «нет» (с обоснованием дома).</p>`,
+    placeholder: "да или нет",
+    answerLabel: "Да, верно",
+    check: v => {
+      const s = v.trim().toLowerCase();
+      return /да|верно/.test(s) && !/нет|не верно|неверно/.test(s);
+    },
+    hint: `<p>Сначала докажите, что знаменатель <i>q</i> рационален: <i>q</i><sup>9</sup> и <i>q</i><sup>29</sup> рациональны, тогда и <i>q</i><sup>2</sup> = <i>q</i><sup>29</sup>/(<i>q</i><sup>9</sup>)<sup>3</sup>, и <i>q</i> = <i>q</i><sup>9</sup>/(<i>q</i><sup>2</sup>)<sup>4</sup>. Далее запишите <i>q</i> = <i>m</i>/<i>n</i> в несократимом виде.</p>`,
+    solution: `<p><b>Шаг 1.</b> Пусть <i>a</i><sub>1</sub> — первый член, <i>q</i> — знаменатель. Из <i>a</i><sub>10</sub> = <i>a</i><sub>1</sub><i>q</i><sup>9</sup> и <i>a</i><sub>30</sub> = <i>a</i><sub>1</sub><i>q</i><sup>29</sup> натуральные, значит <i>q</i><sup>9</sup> и <i>q</i><sup>29</sup> — положительные рациональные числа. Тогда <i>q</i><sup>2</sup> = <i>q</i><sup>29</sup>/(<i>q</i><sup>9</sup>)<sup>3</sup> и <i>q</i> = <i>q</i><sup>9</sup>/(<i>q</i><sup>2</sup>)<sup>4</sup> — тоже положительные рациональные.</p>
+               <p><b>Шаг 2.</b> Пусть <i>q</i> = <i>m</i>/<i>n</i>, где <i>m</i>, <i>n</i> — натуральные взаимно простые. Тогда <i>a</i><sub>30</sub> = <i>a</i><sub>1</sub> <i>m</i><sup>29</sup> / <i>n</i><sup>29</sup> — натуральное число. Так как <i>m</i><sup>29</sup> и <i>n</i><sup>29</sup> взаимно просты, <i>a</i><sub>1</sub> делится на <i>n</i><sup>29</sup>.</p>
+               <p><b>Шаг 3.</b> Тогда <i>a</i><sub>20</sub> = <i>a</i><sub>1</sub> <i>q</i><sup>19</sup> = <i>a</i><sub>1</sub> <i>m</i><sup>19</sup> / <i>n</i><sup>19</sup>. Поскольку <i>n</i><sup>19</sup> | <i>n</i><sup>29</sup> | <i>a</i><sub>1</sub>, это число натуральное.</p>
+               <p class="hint-text">Ответ: <b>верно</b>, двадцатый член натуральный.</p>`
+  }
+];
+
+/* =========================================================
+   ПРОВЕРКА ОТВЕТОВ (только числа, введённые учеником)
+   ========================================================= */
+
+// Разбор строки ответа: числа/выражения вида -1+√3, 1/4, 2^3 не нужны — используем + - * / ( ) √ и цифры
+function evalExpr(s) {
+  // допускаем только цифры, + - * / ( ) . и корень √ (например √3, √(3))
+  let t = s.replace(/−/g, "-").replace(/\s+/g, "");
+  t = t.replace(/√\(([^()]+)\)/g, "Math.sqrt($1)").replace(/√(\d+(\.\d+)?)/g, "Math.sqrt($1)");
+  if (!/^[0-9+\-*/().]*(Math\.sqrt\([0-9+\-*/().]+\)[0-9+\-*/().]*)*$/.test(t)) return NaN;
+  if (t === "") return NaN;
+  try {
+    const val = Function('"use strict"; return (' + t + ');')();
+    return typeof val === "number" && isFinite(val) ? val : NaN;
+  } catch (e) { return NaN; }
+}
+
+function parseList(raw) {
+  if (!raw) return null;
+  const parts = raw.replace(/−/g, "-").split(/[;\n,]+/).map(p => p.trim()).filter(Boolean);
+  const out = [];
+  for (const p of parts) {
+    if (p.includes("±")) {
+      const plus = evalExpr(p.replace("±", "+"));
+      const minus = evalExpr(p.replace("±", "-"));
+      if (isNaN(plus) || isNaN(minus)) return null;
+      out.push(plus, minus);
+    } else {
+      const v = evalExpr(p);
+      if (isNaN(v)) return null;
+      out.push(v);
+    }
+  }
+  return out.length ? out : null;
+}
+
+function approx(a, b) { return Math.abs(a - b) < 1e-6; }
+
+function matchNumbers(raw, expected) {
+  const got = parseList(raw);
+  if (!got || got.length !== expected.length) return false;
+  const a = [...got].sort((x, y) => x - y);
+  const b = [...expected].sort((x, y) => x - y);
+  return a.every((x, i) => approx(x, b[i]));
+}
+
+/* =========================================================
+   ХРАНЕНИЕ ОТВЕТОВ УЧЕНИКА (localStorage, если доступно)
+   ========================================================= */
+
+const STORE_KEY = "progressions-answers-v1";
+function loadAnswers() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { return {}; }
+}
+function saveAnswers(obj) {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(obj)); } catch (e) {}
+}
+const answers = loadAnswers(); // { [taskId]: { text, ok } }
+
+/* =========================================================
+   РЕНДЕР СЛАЙДОВ
+   ========================================================= */
+
+const deck = document.getElementById("deck");
+const slides = [];
+
+function buildTitle() {
+  const s = document.createElement("section");
+  s.className = "slide";
+  s.innerHTML = `
+    <div class="card title-card">
+      <p class="lead" style="margin-bottom:6px">Интерактивный тренажёр</p>
+      <h1>Арифметическая и геометрическая прогрессии</h1>
+      <p class="lead">Задачи из перечневых олимпиад по математике для учеников 10–11 классов.</p>
+      <div class="chips">
+        <span class="chip">10 задач</span>
+        <span class="chip">Подсказки и решения</span>
+        <span class="chip">Проверка ответов</span>
+        <span class="chip">Итоговый список</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Как пользоваться</h3>
+      <ol>
+        <li>Прочитайте условие и попробуйте решить задачу самостоятельно.</li>
+        <li>Введите ответ и нажмите «Проверить» (или Enter).</li>
+        <li>Если застряли — откройте подсказку. Решение лучше смотреть после попытки.</li>
+        <li>Переходите между слайдами кнопками, стрелками на клавиатуре или свайпом.</li>
+      </ol>
+      <p class="note">Ответы сохраняются в браузере, так что можно вернуться позже.</p>
+    </div>`;
+  return s;
+}
+
+function buildTask(t, index) {
+  const s = document.createElement("section");
+  s.className = "slide";
+  s.dataset.task = t.id;
+  s.innerHTML = `
+    <div class="card">
+      <div class="meta">
+        <span class="badge">Задача ${t.id} из ${TASKS.length}</span>
+        <span class="badge" style="background:#fff0f6;color:#a61e4d">Сложность ${t.level}</span>
+      </div>
+      <div class="src">Источник: ${t.source}</div>
+      <h2 style="margin-top:10px">${t.title}</h2>
+      <div class="cond">${t.condition}</div>
+
+      <div class="answer-box">
+        <label for="ans-${t.id}">Ваш ответ</label>
+        <div class="row">
+          <input id="ans-${t.id}" type="text" autocomplete="off" placeholder="${t.placeholder}">
+          <button class="btn-primary check">Проверить</button>
+        </div>
+        <p class="feedback" aria-live="polite"></p>
+      </div>
+
+      <div class="actions">
+        <button class="btn-hint hint-btn">Показать подсказку</button>
+        <button class="btn-sol sol-btn">Показать решение</button>
+      </div>
+
+      <div class="panel hint" hidden><h4>Подсказка</h4>${t.hint}</div>
+      <div class="panel sol" hidden><h4>Решение</h4>${t.solution}</div>
+    </div>`;
+
+  const input = s.querySelector("input");
+  const fb = s.querySelector(".feedback");
+  const saved = answers[t.id];
+  if (saved) {
+    input.value = saved.text;
+    showFeedback(fb, saved.ok);
+  }
+
+  const doCheck = () => {
+    const text = input.value;
+    if (!text.trim()) { fb.textContent = "Введите ответ."; fb.className = "feedback"; return; }
+    const ok = t.check(text);
+    answers[t.id] = { text, ok };
+    saveAnswers(answers);
+    showFeedback(fb, ok);
+    refreshDots();
+  };
+  s.querySelector(".check").addEventListener("click", doCheck);
+  input.addEventListener("keydown", e => { if (e.key === "Enter") doCheck(); });
+
+  const hintBtn = s.querySelector(".hint-btn");
+  const solBtn = s.querySelector(".sol-btn");
+  const hintPanel = s.querySelector(".panel.hint");
+  const solPanel = s.querySelector(".panel.sol");
+  hintBtn.addEventListener("click", () => {
+    hintPanel.hidden = !hintPanel.hidden;
+    hintBtn.textContent = hintPanel.hidden ? "Показать подсказку" : "Скрыть подсказку";
+  });
+  solBtn.addEventListener("click", () => {
+    solPanel.hidden = !solPanel.hidden;
+    solBtn.textContent = solPanel.hidden ? "Показать решение" : "Скрыть решение";
+  });
+  return s;
+}
+
+function showFeedback(el, ok) {
+  el.textContent = ok ? "✔ Верно!" : "✘ Пока неверно — попробуйте ещё раз или посмотрите подсказку.";
+  el.className = "feedback " + (ok ? "ok" : "bad");
+}
+
+function buildSummary() {
+  const s = document.createElement("section");
+  s.className = "slide";
+  s.dataset.summary = "1";
+  return s;
+}
+
+function renderSummary(s) {
+  const rows = TASKS.map(t => {
+    const a = answers[t.id];
+    const mark = !a ? '<span class="mark-none">—</span>' : a.ok ? '<span class="mark-ok">✔</span>' : '<span class="mark-bad">✘</span>';
+    return `<tr>
+      <td>${t.id}</td>
+      <td>${t.title}<div class="note">${t.source}</div></td>
+      <td><b>${t.answerLabel}</b></td>
+      <td>${mark}</td>
+    </tr>`;
+  }).join("");
+  const okCount = TASKS.filter(t => answers[t.id] && answers[t.id].ok).length;
+  const answered = TASKS.filter(t => answers[t.id]).length;
+  s.innerHTML = `
+    <div class="card">
+      <h2>Итоги</h2>
+      <p class="score">Верных ответов: ${okCount} из ${TASKS.length}${answered < TASKS.length ? ` <span class="note">(отвечено: ${answered})</span>` : ""}</p>
+      <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>№</th><th>Задача и источник</th><th>Ответ</th><th></th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      </div>
+      <p class="note" style="margin-top:14px">Отметка «—» — задача ещё не проверялась. Решения каждой задачи доступны на её слайде.</p>
+      <div class="actions"><button class="btn-ghost" id="restart">Начать сначала</button></div>
+    </div>`;
+  s.querySelector("#restart").addEventListener("click", () => {
+    if (!confirm("Очистить все сохранённые ответы?")) return;
+    Object.keys(answers).forEach(k => delete answers[k]);
+    saveAnswers(answers);
+    location.hash = "#slide-1";
+    location.reload();
+  });
+}
+
+buildSlides();
+function buildSlides() {
+  slides.push(buildTitle());
+  TASKS.forEach((t, i) => slides.push(buildTask(t, i)));
+  slides.push(buildSummary());
+  slides.forEach(s => deck.appendChild(s));
+}
+
+/* =========================================================
+   НАВИГАЦИЯ
+   ========================================================= */
+
+const dotsEl = document.getElementById("dots");
+const bar = document.getElementById("bar");
+const counter = document.getElementById("counter");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
+let current = 0;
+
+slides.forEach((_, i) => {
+  const b = document.createElement("button");
+  b.className = "dot";
+  b.setAttribute("aria-label", "Слайд " + (i + 1));
+  b.addEventListener("click", () => go(i));
+  dotsEl.appendChild(b);
+});
+
+function refreshDots() {
+  [...dotsEl.children].forEach((d, i) => {
+    d.classList.toggle("active", i === current);
+    const t = TASKS[i - 1];
+    d.classList.toggle("done", !!(t && answers[t.id] && answers[t.id].ok));
+  });
+}
+
+function go(i, push = true) {
+  if (i < 0 || i >= slides.length) return;
+  slides[current].classList.remove("active");
+  current = i;
+  slides[current].classList.add("active");
+  if (slides[current].dataset.summary) renderSummary(slides[current]);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  bar.style.width = ((current) / (slides.length - 1) * 100) + "%";
+  counter.textContent = (current + 1) + " / " + slides.length;
+  prevBtn.disabled = current === 0;
+  nextBtn.textContent = current === slides.length - 1 ? "В начало ↺" : "Вперёд →";
+  prevBtn.style.visibility = current === 0 ? "hidden" : "visible";
+  refreshDots();
+  if (push) history.replaceState(null, "", "#slide-" + (current + 1));
+  const first = slides[current].querySelector("input");
+  // не фокусируем поле на телефоне, чтобы не открывать клавиатуру без запроса
+  if (first && window.matchMedia("(pointer: fine)").matches) first.focus({ preventScroll: true });
+}
+
+prevBtn.addEventListener("click", () => go(current - 1));
+nextBtn.addEventListener("click", () => {
+  if (current === slides.length - 1) go(0); else go(current + 1);
+});
+
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT") return;
+  if (e.key === "ArrowRight") go(current + 1);
+  if (e.key === "ArrowLeft") go(current - 1);
+});
+
+let touchX = null;
+document.addEventListener("touchstart", e => { touchX = e.changedTouches[0].clientX; }, { passive: true });
+document.addEventListener("touchend", e => {
+  if (touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 60 && !e.target.closest("input")) go(current + (dx < 0 ? 1 : -1));
+  touchX = null;
+}, { passive: true });
+
+window.addEventListener("hashchange", () => {
+  const m = location.hash.match(/^#slide-(\d+)$/);
+  if (m) go(Math.min(slides.length - 1, Math.max(0, +m[1] - 1)), false);
+});
+
+// старт: из хэша или с первого слайда
+(function init() {
+  const m = location.hash.match(/^#slide-(\d+)$/);
+  const start = m ? Math.min(slides.length - 1, Math.max(0, +m[1] - 1)) : 0;
+  slides[0].classList.add("active");
+  go(start, true);
+  refreshDots();
+})();
+</script>
+</body>
+</html>
