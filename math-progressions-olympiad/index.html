@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Прогрессии — олимпиадный практикум · 10–11 класс</title>
+<meta name="description" content="Интерактивная презентация: 12 задач на арифметическую и геометрическую прогрессии из перечневых олимпиад (ПВГ, Ломоносов, Физтех, Высшая проба, ОММО) с подсказками, решениями и проверкой ответов.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📐</text></svg>">
+<style>
+  :root{
+    --bg:#f5f3ee; --card:#ffffff; --ink:#243041; --muted:#6b7686;
+    --accent:#4f46e5; --accent-soft:#eef2ff; --accent-ink:#3730a3;
+    --teal:#0d9488; --teal-soft:#f0fdfa;
+    --amber:#b45309; --amber-soft:#fffbeb;
+    --green:#15803d; --green-soft:#f0fdf4;
+    --red:#b91c1c; --red-soft:#fef2f2;
+    --line:#e5e1d8; --radius:16px;
+    --shadow:0 10px 30px rgba(36,48,65,.08);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PT Sans","Helvetica Neue",Arial,sans-serif;
+    font-size:17px; line-height:1.6;
+    display:flex; flex-direction:column; min-height:100vh;
+  }
+  /* ---------- header ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50; background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:960px; margin:0 auto; padding:10px 16px;
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  }
+  .brand{font-weight:700; font-size:15px; color:var(--accent-ink); white-space:nowrap}
+  .top-right{margin-left:auto; display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+  .chip{
+    font-size:13px; font-weight:600; padding:4px 10px; border-radius:999px;
+    background:var(--green-soft); color:var(--green); border:1px solid #bbf7d0; white-space:nowrap;
+  }
+  #jump{
+    font:inherit; font-size:13px; max-width:190px; padding:5px 8px;
+    border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink);
+  }
+  .progress{height:4px; background:#e9e5dc}
+  #progressFill{height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--teal)); transition:width .3s}
+  /* ---------- deck ---------- */
+  main{flex:1; width:100%; max-width:960px; margin:0 auto; padding:22px 16px 30px}
+  .slide{display:none; animation:fadein .28s ease}
+  .slide.active{display:block}
+  @keyframes fadein{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:26px 28px;
+  }
+  @media (max-width:600px){ .card{padding:20px 16px} body{font-size:16px} }
+  /* ---------- title slide ---------- */
+  .kicker{font-size:13px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--teal)}
+  h1{font-size:clamp(34px,7vw,54px); line-height:1.1; margin:10px 0 6px; color:var(--accent-ink)}
+  .subtitle{font-size:clamp(17px,2.6vw,21px); color:var(--muted); margin:0 0 18px}
+  .chips{display:flex; gap:8px; flex-wrap:wrap; margin:14px 0}
+  .tag{font-size:13px; font-weight:600; padding:5px 12px; border-radius:999px; background:var(--accent-soft); color:var(--accent-ink)}
+  .tag.t2{background:var(--teal-soft); color:var(--teal)}
+  .formula-strip{
+    font-family:Georgia,"Times New Roman",serif; font-style:italic; text-align:center;
+    background:linear-gradient(90deg,var(--accent-soft),var(--teal-soft));
+    border-radius:12px; padding:12px; margin:18px 0; font-size:18px; color:#3b4a63;
+  }
+  .howto{margin:18px 0; padding:0 0 0 20px}
+  .howto li{margin:7px 0}
+  .note{font-size:14px; color:var(--muted)}
+  /* ---------- buttons ---------- */
+  .btn{
+    font:inherit; font-size:15px; font-weight:600; cursor:pointer;
+    border-radius:10px; padding:10px 18px; min-height:44px;
+    border:1px solid transparent; transition:transform .08s, box-shadow .15s;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--accent); color:#fff}
+  .btn-primary:hover{box-shadow:0 6px 16px rgba(79,70,229,.35)}
+  .btn-ghost{background:#fff; border-color:var(--line); color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--accent)}
+  .btn-hint{background:var(--amber-soft); color:var(--amber); border-color:#fde68a}
+  .btn-sol{background:var(--teal-soft); color:var(--teal); border-color:#99f6e4}
+  .btn[disabled]{opacity:.45; cursor:default; box-shadow:none}
+  .btn-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:18px}
+  /* ---------- problem ---------- */
+  .p-head{display:flex; align-items:flex-start; gap:10px; flex-wrap:wrap; margin-bottom:14px}
+  .p-num{
+    flex:0 0 auto; width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    background:var(--accent); color:#fff; font-weight:800; font-size:19px;
+  }
+  .p-meta{display:flex; flex-direction:column; gap:4px; min-width:0}
+  .p-source{font-size:14px; font-weight:700; color:var(--accent-ink)}
+  .p-source a{color:inherit; text-decoration:none; border-bottom:1px dotted var(--accent-ink)}
+  .p-details{font-size:12.5px; color:var(--muted)}
+  .p-badges{margin-left:auto; display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+  .badge{font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px}
+  .badge.topic{background:var(--teal-soft); color:var(--teal); border:1px solid #99f6e4}
+  .badge.diff{background:var(--amber-soft); color:var(--amber); border:1px solid #fde68a; letter-spacing:2px}
+  .p-title{font-size:21px; margin:2px 0 10px; color:var(--ink)}
+  .p-text{font-size:17.5px}
+  .p-text p{margin:10px 0}
+  .answer-box{
+    margin-top:20px; padding:16px; border:1.5px dashed #c7d2fe; border-radius:12px; background:#fafaff;
+  }
+  .answer-box label{font-size:14px; font-weight:700; color:var(--accent-ink); display:block; margin-bottom:8px}
+  .answer-row{display:flex; gap:8px; flex-wrap:wrap}
+  .answer-row input{
+    flex:1 1 220px; font:inherit; font-size:16px; padding:10px 14px; min-height:44px;
+    border:1.5px solid var(--line); border-radius:10px; background:#fff; color:var(--ink);
+  }
+  .answer-row input:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft)}
+  .answer-row input.ok{border-color:var(--green); background:var(--green-soft)}
+  .answer-row input.bad{border-color:var(--red); background:var(--red-soft)}
+  .format-hint{font-size:12.5px; color:var(--muted); margin-top:8px}
+  .feedback{margin-top:10px; font-weight:600; font-size:15px; min-height:22px}
+  .feedback.ok{color:var(--green)} .feedback.bad{color:var(--red)} .feedback.warn{color:var(--amber)}
+  .reveal{display:none; margin-top:16px; border-radius:12px; padding:16px 18px; font-size:16px}
+  .reveal.open{display:block; animation:fadein .25s ease}
+  .reveal h4{margin:0 0 8px; font-size:15px}
+  .hint-box{background:var(--amber-soft); border:1px solid #fde68a; border-left:5px solid #f59e0b}
+  .hint-box h4{color:var(--amber)}
+  .sol-box{background:var(--teal-soft); border:1px solid #99f6e4; border-left:5px solid var(--teal)}
+  .sol-box h4{color:var(--teal)}
+  .sol-box ol{margin:8px 0; padding-left:22px}
+  .sol-box li{margin:8px 0}
+  .final-answer{
+    margin-top:12px; padding:10px 14px; background:#fff; border:1px solid #99f6e4;
+    border-radius:10px; font-weight:700; color:var(--teal);
+  }
+  /* ---------- math ---------- */
+  .f{font-family:Georgia,"Times New Roman",serif; font-style:italic; white-space:nowrap}
+  .fw{font-family:Georgia,"Times New Roman",serif; font-style:italic}
+  .f sub,.f sup,.fw sub,.fw sup{font-size:.72em}
+  .frac{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; font-size:.9em; line-height:1.2; margin:0 2px}
+  .frac .den{border-top:1.5px solid currentColor}
+  .ovl{text-decoration:overline}
+  .formula{
+    font-family:Georgia,"Times New Roman",serif; font-style:italic;
+    background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px;
+    padding:10px 14px; margin:10px 0; overflow-x:auto; font-size:17px;
+  }
+  /* ---------- theory ---------- */
+  .theory-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px}
+  @media (max-width:700px){ .theory-grid{grid-template-columns:1fr} }
+  .theory-card{border:1px solid var(--line); border-radius:12px; padding:16px 18px; background:#fcfbf8}
+  .theory-card h3{margin:0 0 8px; font-size:17px; color:var(--accent-ink)}
+  .theory-card.gp h3{color:var(--teal)}
+  .theory-card ul{margin:6px 0; padding-left:18px}
+  .theory-card li{margin:6px 0}
+  .tricks{margin-top:16px; background:var(--accent-soft); border-radius:12px; padding:16px 18px}
+  .tricks h3{margin:0 0 8px; font-size:16px; color:var(--accent-ink)}
+  .tricks li{margin:6px 0}
+  /* ---------- summary ---------- */
+  .score-banner{
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    background:linear-gradient(90deg,var(--accent-soft),var(--teal-soft));
+    border-radius:12px; padding:16px 18px; margin:14px 0;
+  }
+  .score-num{font-size:34px; font-weight:800; color:var(--accent-ink)}
+  table.results{width:100%; border-collapse:collapse; font-size:14.5px; margin-top:10px}
+  table.results th{
+    text-align:left; font-size:12.5px; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--muted); padding:8px 10px; border-bottom:2px solid var(--line);
+  }
+  table.results td{padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+  table.results tr.rowlink{cursor:pointer}
+  table.results tr.rowlink:hover td{background:var(--accent-soft)}
+  .st{font-weight:700; white-space:nowrap}
+  .st.ok{color:var(--green)} .st.bad{color:var(--red)} .st.none{color:var(--muted)}
+  .seen{font-size:12px; color:var(--muted); white-space:nowrap}
+  .ans-cell{font-weight:600}
+  details.sources{margin-top:18px; border:1px solid var(--line); border-radius:12px; padding:12px 16px; background:#fcfbf8}
+  details.sources summary{cursor:pointer; font-weight:700; color:var(--accent-ink)}
+  details.sources ul{padding-left:20px; font-size:14px}
+  details.sources li{margin:6px 0}
+  details.sources a{color:var(--accent)}
+  .table-wrap{overflow-x:auto}
+  /* ---------- footer nav ---------- */
+  .navbar{
+    position:sticky; bottom:0; z-index:50; background:rgba(255,255,255,.95);
+    backdrop-filter:blur(8px); border-top:1px solid var(--line);
+  }
+  .navbar-inner{
+    max-width:960px; margin:0 auto; padding:10px 16px;
+    display:flex; align-items:center; gap:12px;
+  }
+  #counter{margin:0 auto; font-size:14px; font-weight:700; color:var(--muted); white-space:nowrap}
+  .nav-hint{font-size:11.5px; color:var(--muted); text-align:center; padding:0 16px 6px}
+  @media (max-width:600px){
+    .nav-hint{display:none}
+    .brand{font-size:13px}
+    #jump{max-width:130px}
+    .p-badges{margin-left:0}
+  }
+  /* ---------- print ---------- */
+  @media print{
+    .topbar,.navbar,.btn-row,.answer-box .btn,.nav-hint{display:none !important}
+    body{background:#fff}
+    main{max-width:100%; padding:0}
+    .slide{display:block !important; page-break-after:always; animation:none}
+    .card{box-shadow:none; border:none; padding:10px 0}
+    .reveal{display:block !important}
+    .answer-box{border:none; background:none; padding:0}
+    .answer-row{display:none}
+    a{color:inherit; text-decoration:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">📐 Прогрессии · олимпиадный практикум</div>
+    <div class="top-right">
+      <span class="chip" id="solvedChip">Верно: 0 / 12</span>
+      <select id="jump" aria-label="Перейти к слайду"></select>
+    </div>
+  </div>
+  <div class="progress"><div id="progressFill"></div></div>
+</header>
+
+<main id="deck" aria-live="polite"></main>
+
+<footer class="navbar">
+  <div class="navbar-inner">
+    <button class="btn btn-ghost" id="prevBtn">← Назад</button>
+    <div id="counter">1 / 15</div>
+    <button class="btn btn-primary" id="nextBtn">Вперёд →</button>
+  </div>
+  <div class="nav-hint">Листайте стрелками ← → на клавиатуре или свайпом на телефоне</div>
+</footer>
+
+<noscript><div style="max-width:700px;margin:30px auto;padding:20px;background:#fff;border-radius:12px">
+  Для работы практикума нужен JavaScript. Включите его в браузере и обновите страницу.
+</div></noscript>
+
+<script>
+"use strict";
+/* =====================================================================
+   ДАННЫЕ: 12 задач перечневых олимпиад на прогрессии.
+   Условия — по открытым архивам (см. «Источники» на последнем слайде);
+   подсказки и решения подготовлены для этого практикума и проверены
+   символьно и подстановкой (tools/verify.py в репозитории).
+   ===================================================================== */
+const PROBLEMS = [
+{
+  id:"p1", diff:1, topic:"геометрическая",
+  title:"Отношение сумм",
+  source:"«Покори Воробьёвы горы!»", year:"2019", grade:"10–11 классы", stage:"",
+  url:"https://mathus.ru/math/posled.pdf",
+  text:`<p>Сумма шести первых членов геометрической прогрессии, состоящей из положительных чисел,
+        в <b>344 раза</b> больше суммы трёх её первых членов. Найдите знаменатель прогрессии.</p>`,
+  placeholder:"Например: 7",
+  format:"Ответ — одно число.",
+  hint:`<p>Разбейте сумму шести членов на два блока по три. Второй блок — это первый, у которого каждый член умножен на одно и то же число. Какое?</p>`,
+  solution:`<ol>
+    <li>Запишем: <span class="f">S<sub>6</sub> = (b<sub>1</sub>+b<sub>2</sub>+b<sub>3</sub>) + (b<sub>4</sub>+b<sub>5</sub>+b<sub>6</sub>)</span>.
+        Так как <span class="f">b<sub>4</sub>=b<sub>1</sub>q<sup>3</sup></span>, <span class="f">b<sub>5</sub>=b<sub>2</sub>q<sup>3</sup></span>, <span class="f">b<sub>6</sub>=b<sub>3</sub>q<sup>3</sup></span>,
+        получаем <span class="f">S<sub>6</sub> = S<sub>3</sub>(1+q<sup>3</sup>)</span>.</li>
+    <li>По условию <span class="f">S<sub>3</sub>(1+q<sup>3</sup>) = 344·S<sub>3</sub></span>. Все члены положительны, поэтому <span class="f">S<sub>3</sub> &gt; 0</span> и на него можно сократить:
+        <span class="f">1+q<sup>3</sup> = 344</span>.</li>
+    <li>Отсюда <span class="f">q<sup>3</sup> = 343 = 7<sup>3</sup></span>, значит <span class="f">q = 7</span>.</li>
+  </ol>`,
+  answer:"7", check:{type:"num", values:[7]}
+},
+{
+  id:"p2", diff:1, topic:"геометрическая",
+  title:"Пять плюс пять",
+  source:"«Покори Воробьёвы горы!»", year:"2016", grade:"10–11 классы", stage:"",
+  url:"https://mathus.ru/math/posled.pdf",
+  text:`<p>Сумма пяти первых членов геометрической прогрессии равна <b>93</b>, а сумма следующих пяти членов равна <b>2976</b>.
+        Найдите сумму первых семи членов прогрессии.</p>`,
+  placeholder:"Например: 381",
+  format:"Ответ — одно число.",
+  hint:`<p>Каждый член второго блока из пяти в <span class="f">q<sup>5</sup></span> раз больше соответствующего члена первого блока. Найдите сначала <span class="f">q</span>, потом <span class="f">b<sub>1</sub></span>.</p>`,
+  solution:`<ol>
+    <li><span class="f">b<sub>6</sub>+…+b<sub>10</sub> = q<sup>5</sup>(b<sub>1</sub>+…+b<sub>5</sub>)</span>, поэтому
+        <span class="f">q<sup>5</sup> = 2976/93 = 32</span>, откуда <span class="f">q = 2</span>.</li>
+    <li><span class="f">S<sub>5</sub> = b<sub>1</sub>(2<sup>5</sup>−1)/(2−1) = 31b<sub>1</sub> = 93</span>, значит <span class="f">b<sub>1</sub> = 3</span>.</li>
+    <li><span class="f">S<sub>7</sub> = 3·(2<sup>7</sup>−1)/(2−1) = 3·127 = 381</span>.</li>
+  </ol>`,
+  answer:"381", check:{type:"num", values:[381]}
+},
+{
+  id:"p3", diff:2, topic:"геометрическая",
+  title:"Модуль в прогрессии",
+  source:"«Физтех»", year:"2016", grade:"10 класс", stage:"",
+  url:"https://mathus.ru/math/posled.pdf",
+  text:`<p>Найдите все значения <span class="f">p</span>, при каждом из которых числа
+        <span class="f">4p+5</span>, <span class="f">2p</span> и <span class="f">|p−3|</span>
+        являются соответственно первым, вторым и третьим членами некоторой геометрической прогрессии.</p>`,
+  placeholder:"Например: -1; 15/8",
+  format:"Несколько значений вводите через точку с запятой (;). Дроби — как 15/8 или 1,875.",
+  hint:`<p>Характеристическое свойство: квадрат среднего члена равен произведению крайних. Раскройте модуль в двух случаях. И не забудьте: члены геометрической прогрессии не могут быть нулями.</p>`,
+  solution:`<ol>
+    <li>Члены ГП ненулевые: <span class="f">p ≠ 0</span>, <span class="f">p ≠ −5/4</span>, <span class="f">p ≠ 3</span>.
+        Условие: <span class="f">(2p)<sup>2</sup> = (4p+5)·|p−3|</span>.</li>
+    <li><b>Случай <span class="f">p &lt; 3</span>:</b> <span class="f">4p<sup>2</sup> = (4p+5)(3−p)</span>
+        ⟹ <span class="f">8p<sup>2</sup> − 7p − 15 = 0</span>, <span class="f">D = 49 + 480 = 529 = 23<sup>2</sup></span>,
+        <span class="f">p = (7 ± 23)/16</span>: получаем <span class="f">p = 15/8</span> или <span class="f">p = −1</span>. Оба меньше 3.</li>
+    <li><b>Случай <span class="f">p &gt; 3</span>:</b> <span class="f">4p<sup>2</sup> = (4p+5)(p−3)</span>
+        ⟹ <span class="f">0 = −7p − 15</span> ⟹ <span class="f">p = −15/7</span> — не удовлетворяет <span class="f">p &gt; 3</span>, отбрасываем.</li>
+    <li><b>Проверка.</b> При <span class="f">p = −1</span>: числа 1, −2, 4 — ГП со знаменателем −2. ✓<br>
+        При <span class="f">p = 15/8</span>: числа 12,5; 3,75; 1,125 — ГП со знаменателем 0,3. ✓
+        (При ненулевых крайних членах равенство <span class="f">b<sub>2</sub><sup>2</sup>=b<sub>1</sub>b<sub>3</sub></span> достаточно: тогда <span class="f">b<sub>3</sub> = b<sub>2</sub>·(b<sub>2</sub>/b<sub>1</sub>)</span>.)</li>
+  </ol>`,
+  answer:"−1; 15/8 (= 1,875)", check:{type:"num", values:[-1, 1.875]}
+},
+{
+  id:"p4", diff:2, topic:"геометрическая",
+  title:"Сумма до бесконечности",
+  source:"«Покори Воробьёвы горы!»", year:"2017", grade:"10–11 классы", stage:"",
+  url:"https://mathus.ru/math/posled.pdf",
+  text:`<p>Найдите сумму бесконечно убывающей геометрической прогрессии, если её второй член равен <b>3</b>,
+        а сумма первых трёх её членов равна <b>13</b>.</p>`,
+  placeholder:"Например: 13,5 или 27/2",
+  format:"Ответ — число (десятичная дробь или обыкновенная).",
+  hint:`<p>Выразите всё через знаменатель: <span class="f">b<sub>1</sub> = 3/q</span>, <span class="f">b<sub>3</sub> = 3q</span>. Получится квадратное уравнение с двумя корнями — «бесконечно убывающая» означает <span class="f">|q| &lt; 1</span>, это и выберет нужный.</p>`,
+  solution:`<ol>
+    <li><span class="f">3/q + 3 + 3q = 13</span>. Умножим на <span class="f">q</span>:
+        <span class="f">3q<sup>2</sup> − 10q + 3 = 0</span>, <span class="f">D = 100 − 36 = 64</span>,
+        <span class="f">q = (10 ± 8)/6</span>, то есть <span class="f">q = 3</span> или <span class="f">q = 1/3</span>.</li>
+    <li>Бесконечно убывающая ГП: <span class="f">|q| &lt; 1</span> ⟹ <span class="f">q = 1/3</span>, тогда <span class="f">b<sub>1</sub> = 3/q = 9</span>.</li>
+    <li><span class="f">S = b<sub>1</sub>/(1−q) = 9/(2/3) = 27/2 = 13,5</span>.</li>
+  </ol>`,
+  answer:"27/2 = 13,5", check:{type:"num", values:[13.5]}
+},
+{
+  id:"p5", diff:2, topic:"АП + ГП",
+  title:"ГП внутри АП",
+  source:"ОММО", year:"2009", grade:"", stage:"",
+  url:"https://mathus.ru/math/posled.pdf",
+  text:`<p>Третий, четвёртый, седьмой и последний члены <b>непостоянной</b> арифметической прогрессии
+        образуют геометрическую прогрессию. Найдите число членов этой арифметической прогрессии.</p>`,
+  placeholder:"Например: 16",
+  format:"Ответ — одно число (количество членов).",
+  hint:`<p>Пусть первый член <span class="f">a</span>, разность <span class="f">d ≠ 0</span>. Из равенства
+        <span class="f">(a+3d)<sup>2</sup> = (a+2d)(a+6d)</span> найдите связь между <span class="f">a</span> и <span class="f">d</span>, затем знаменатель ГП.</p>`,
+  solution:`<ol>
+    <li><span class="f">a<sub>3</sub> = a+2d</span>, <span class="f">a<sub>4</sub> = a+3d</span>, <span class="f">a<sub>7</sub> = a+6d</span>.
+        Характеристическое свойство ГП: <span class="f">(a+3d)<sup>2</sup> = (a+2d)(a+6d)</span>
+        ⟹ <span class="f">2ad + 3d<sup>2</sup> = 0</span>. Так как <span class="f">d ≠ 0</span>, получаем <span class="f">a = −3d/2</span>.</li>
+    <li>Тогда <span class="f">a<sub>3</sub> = d/2</span>, <span class="f">a<sub>4</sub> = 3d/2</span>, <span class="f">a<sub>7</sub> = 9d/2</span> — знаменатель <span class="f">q = 3</span>.</li>
+    <li>Четвёртый член этой ГП — последний член АП: <span class="f">a<sub>n</sub> = a<sub>7</sub>·3 = 27d/2</span>.
+        С другой стороны, <span class="f">a<sub>n</sub> = a + (n−1)d = (n − 5/2)d</span>.</li>
+    <li><span class="f">n − 5/2 = 27/2</span> ⟹ <span class="f">n = 16</span>.
+        Контроль: члены <span class="f">d/2, 3d/2, 9d/2, 27d/2</span> — действительно ГП со знаменателем 3. ✓</li>
+  </ol>`,
+  answer:"16", check:{type:"num", values:[16]}
+},
+{
+  id:"p6", diff:2, topic:"геометрическая",
+  title:"Средние арифметические",
+  source:"«Покори Воробьёвы горы!»", year:"2020", grade:"11 класс", stage:"",
+  url:"https://mathus.ru/math/msuProgress.pdf",
+  text:`<p>Геометрическая прогрессия состоит из шести членов. Среднее арифметическое её первых четырёх членов равно <b>15</b>,
+        а среднее арифметическое последних четырёх членов равно <b>60</b>.
+        Чему может быть равен последний член прогрессии? Укажите все возможные значения.</p>`,
+  placeholder:"Например: 128; 384",
+  format:"Все возможные значения — через точку с запятой (;).",
+  hint:`<p>Перейдите от средних к суммам: 60 и 240. Сдвинутый на два члена блок суммы больше в <span class="f">q<sup>2</sup></span> раз. Из уравнения <span class="f">q<sup>2</sup> = 4</span> не потеряйте отрицательный корень!</p>`,
+  solution:`<ol>
+    <li>Суммы: <span class="f">b<sub>1</sub>+…+b<sub>4</sub> = 4·15 = 60</span>,
+        <span class="f">b<sub>3</sub>+…+b<sub>6</sub> = 4·60 = 240</span>.</li>
+    <li>Второй блок — первый, умноженный на <span class="f">q<sup>2</sup></span>:
+        <span class="f">q<sup>2</sup> = 240/60 = 4</span> ⟹ <span class="f">q = 2</span> или <span class="f">q = −2</span>.</li>
+    <li><b><span class="f">q = 2</span>:</b> <span class="f">b<sub>1</sub>(1+2+4+8) = 15b<sub>1</sub> = 60</span> ⟹ <span class="f">b<sub>1</sub> = 4</span>,
+        <span class="f">b<sub>6</sub> = 4·2<sup>5</sup> = 128</span>.</li>
+    <li><b><span class="f">q = −2</span>:</b> <span class="f">b<sub>1</sub>(1−2+4−8) = −5b<sub>1</sub> = 60</span> ⟹ <span class="f">b<sub>1</sub> = −12</span>,
+        <span class="f">b<sub>6</sub> = −12·(−2)<sup>5</sup> = 384</span>.</li>
+    <li>Оба варианта проходят проверку условий (проверьте средние!), поэтому значений два.</li>
+  </ol>`,
+  answer:"128 или 384", check:{type:"num", values:[128, 384]}
+},
+{
+  id:"p7", diff:2, topic:"арифметическая",
+  title:"Во сколько раз изменится сумма?",
+  source:"«Физтех»", year:"2020", grade:"10 класс", stage:"",
+  url:"https://mathus.ru/math/posled.pdf",
+  text:`<p>Дана конечная арифметическая прогрессия <span class="f">a<sub>1</sub>, a<sub>2</sub>, …, a<sub>n</sub></span>
+        с положительной разностью, причём сумма всех её членов равна <span class="f">S</span>, а <span class="f">a<sub>1</sub> &gt; 0</span>.
+        Известно, что если разность прогрессии увеличить в 3 раза, а её первый член оставить неизменным,
+        то сумма <span class="f">S</span> увеличится в 2 раза.
+        А во сколько раз увеличится <span class="f">S</span>, если разность исходной прогрессии увеличить в 4 раза
+        (оставив первый член неизменным)?</p>`,
+  placeholder:"Например: 2,5 или 5/2",
+  format:"Ответ — число (во сколько раз).",
+  hint:`<p>В формуле <span class="f">S = n·a<sub>1</sub> + n(n−1)d/2</span> сумма состоит из двух частей: <span class="f">A = n·a<sub>1</sub></span> не зависит от <span class="f">d</span>, а <span class="f">B = n(n−1)d/2</span> пропорциональна <span class="f">d</span>. Что происходит с A и B при утроении разности?</p>`,
+  solution:`<ol>
+    <li><span class="f">S = n·a<sub>1</sub> + n(n−1)d/2 = A + B</span>, где <span class="f">A = n·a<sub>1</sub> &gt; 0</span>,
+        <span class="f">B = n(n−1)d/2 &gt; 0</span> (здесь <span class="f">n ≥ 2</span>, иначе сумма не менялась бы).</li>
+    <li>Утроение разности утраивает только <span class="f">B</span>: <span class="f">A + 3B = 2(A+B)</span> ⟹ <span class="f">B = A</span>,
+        то есть <span class="f">S = 2A</span>.</li>
+    <li>Учетверение разности: новая сумма <span class="f">A + 4B = 5A</span>.
+        Отношение: <span class="f">5A / 2A = 5/2</span>.</li>
+    <li>Ответ не зависит от конкретных <span class="f">n</span>, <span class="f">a<sub>1</sub></span>, <span class="f">d</span> — такова сила «разложения на блоки».</li>
+  </ol>`,
+  answer:"в 5/2 раза (= 2,5)", check:{type:"num", values:[2.5]}
+},
+{
+  id:"p8", diff:2, topic:"геометрическая",
+  title:"Сумма квадратов",
+  source:"«Покори Воробьёвы горы!»", year:"2014", grade:"10–11 классы", stage:"",
+  url:"https://mathus.ru/math/posled.pdf",
+  text:`<p>Сумма бесконечно убывающей геометрической прогрессии <span class="f">b<sub>1</sub>, b<sub>2</sub>, b<sub>3</sub>, …</span>
+        равна <b>70</b>, сумма квадратов членов этой прогрессии равна <b>2100</b>.
+        Найдите сумму новой бесконечно убывающей геометрической прогрессии, у которой первый член равен
+        <span class="f">−b<sub>1</sub></span>, а знаменатель отличается от знаменателя исходной прогрессии только знаком.</p>`,
+  placeholder:"Например: -30",
+  format:"Ответ — одно число (может быть отрицательным).",
+  hint:`<p>Квадраты членов — тоже бесконечно убывающая ГП: первый член <span class="f">b<sub>1</sub><sup>2</sup></span>, знаменатель <span class="f">q<sup>2</sup></span>. Поделите уравнение для квадратов на уравнение для суммы, разложив <span class="f">1−q<sup>2</sup> = (1−q)(1+q)</span>.</p>`,
+  solution:`<ol>
+    <li><span class="f">b<sub>1</sub>/(1−q) = 70</span> и <span class="f">b<sub>1</sub><sup>2</sup>/(1−q<sup>2</sup>) = 2100</span>.</li>
+    <li>Делим второе на первое: <span class="f">b<sub>1</sub>(1−q)/((1−q)(1+q)) = b<sub>1</sub>/(1+q) = 2100/70 = 30</span>.</li>
+    <li>Новая прогрессия: первый член <span class="f">−b<sub>1</sub></span>, знаменатель <span class="f">−q</span> (тоже <span class="f">|−q|&lt;1</span>), её сумма
+        <span class="f">S′ = −b<sub>1</sub>/(1−(−q)) = −b<sub>1</sub>/(1+q) = −30</span>. Ответ уже получен!</li>
+    <li>Для контроля можно найти и сами параметры: из <span class="f">b<sub>1</sub> = 70(1−q) = 30(1+q)</span> следует
+        <span class="f">q = 0,4</span>, <span class="f">b<sub>1</sub> = 42</span>; тогда <span class="f">S′ = −42/1,4 = −30</span>. ✓</li>
+  </ol>`,
+  answer:"−30", check:{type:"num", values:[-30]}
+},
+{
+  id:"p9", diff:3, topic:"арифметическая",
+  title:"Произведение равно среднему",
+  source:"«Ломоносов»", year:"2012", grade:"10–11 классы", stage:"заключительный (очный) тур",
+  url:"http://olympiads.biz/forum/discussion/61/olimpiada-lomonosov-2011-2012-zadaniya-i-resheniya-ochnogo-tura-po-matematike",
+  text:`<p>Найдите первый член арифметической прогрессии <span class="f">a<sub>1</sub>, a<sub>2</sub>, …</span>,
+        если <span class="f">a<sub>13</sub> = 0</span>, а произведение чисел
+        <span class="f">5<sup>a<sub>1</sub></sup>, 5<sup>a<sub>2</sub></sup>, …, 5<sup>a<sub>24</sub></sup></span>
+        равно их среднему арифметическому.</p>`,
+  placeholder:"Например: 0",
+  format:"Ответ — одно число.",
+  hint:`<p>Произведение степеней — это степень с показателем <span class="f">a<sub>1</sub>+…+a<sub>24</sub></span>. Вычислите эту сумму через <span class="f">d</span>, используя <span class="f">a<sub>13</sub>=0</span>, и сравните результат с <span class="f">a<sub>1</sub></span>. Когда среднее арифметическое набора чисел равно первому (крайнему) из них?</p>`,
+  solution:`<ol>
+    <li>Обозначим <span class="f">x<sub>i</sub> = 5<sup>a<sub>i</sub></sup></span>. Произведение
+        <span class="f">P = 5<sup>a<sub>1</sub>+…+a<sub>24</sub></sup></span>.</li>
+    <li>Из <span class="f">a<sub>13</sub> = a<sub>1</sub> + 12d = 0</span>: <span class="f">a<sub>1</sub> = −12d</span>, <span class="f">a<sub>24</sub> = 11d</span>.
+        Сумма: <span class="f">a<sub>1</sub>+…+a<sub>24</sub> = 12(a<sub>1</sub>+a<sub>24</sub>) = 12·(−d) = −12d = a<sub>1</sub></span>.
+        Значит, <span class="f">P = 5<sup>a<sub>1</sub></sup> = x<sub>1</sub></span> — произведение равно <b>первому</b> из чисел!</li>
+    <li>Условие превращается в: среднее арифметическое чисел <span class="f">x<sub>1</sub>, …, x<sub>24</sub></span> равно <span class="f">x<sub>1</sub></span>.
+        Если <span class="f">d &gt; 0</span>, то <span class="f">x<sub>1</sub></span> — наименьшее из 24 различных чисел, и среднее строго больше него.
+        Если <span class="f">d &lt; 0</span> — наибольшее, и среднее строго меньше. Противоречие в обоих случаях.</li>
+    <li>Остаётся <span class="f">d = 0</span>: тогда все <span class="f">a<sub>i</sub> = 0</span> (ведь <span class="f">a<sub>13</sub>=0</span>),
+        все <span class="f">x<sub>i</sub> = 1</span>, произведение = 1 = среднее. ✓ Значит, <span class="f">a<sub>1</sub> = 0</span>.</li>
+  </ol>`,
+  answer:"0", check:{type:"num", values:[0]}
+},
+{
+  id:"p10", diff:3, topic:"арифметическая",
+  title:"Сдвиг прогрессии",
+  source:"«Покори Воробьёвы горы!»", year:"2013", grade:"10–11 классы", stage:"",
+  url:"https://mathus.ru/math/posled.pdf",
+  text:`<p>Несколько чисел образуют арифметическую прогрессию, причём их сумма равна <b>63</b>,
+        а первый член в полтора раза больше разности прогрессии. Если все члены прогрессии уменьшить
+        на одну и ту же величину так, чтобы первый член прогрессии был равен разности прогрессии,
+        то сумма всех чисел уменьшится не более чем на <b>8</b>, но не менее чем на <b>7</b>.
+        Определите, какой может быть разность этой прогрессии.</p>`,
+  placeholder:"Например: 2; 21/8",
+  format:"Все возможные значения — через точку с запятой (;). Дроби — как 21/8 или 2,625.",
+  hint:`<p>Каждый член уменьшается на <span class="f">a<sub>1</sub> − d = d/2</span>, вся сумма — на <span class="f">nd/2</span>, значит <span class="f">nd ∈ [14; 16]</span>. Запишите сумму 63 в виде <span class="f">nd(n+2)/2</span> и вспомните, что <span class="f">n</span> — целое.</p>`,
+  solution:`<ol>
+    <li>Сдвиг: из каждого члена вычитаем <span class="f">c = a<sub>1</sub> − d = 1,5d − d = d/2</span>.
+        Сумма уменьшается на <span class="f">nc = nd/2 ∈ [7; 8]</span>, то есть <span class="f">nd ∈ [14; 16]</span>.</li>
+    <li>Сумма прогрессии: <span class="f">63 = n(a<sub>1</sub>+a<sub>n</sub>)/2 = n(1,5d + 1,5d + (n−1)d)/2 = nd(n+2)/2</span>,
+        откуда <span class="f">nd(n+2) = 126</span> и <span class="f">n+2 = 126/(nd)</span>.</li>
+    <li>Так как <span class="f">nd ∈ [14; 16]</span>, то <span class="f">n+2 ∈ [126/16; 126/14] = [7,875; 9]</span>.
+        Целое <span class="f">n+2</span> равно 8 или 9, то есть <span class="f">n = 6</span> или <span class="f">n = 7</span>.</li>
+    <li><b><span class="f">n = 6</span>:</b> <span class="f">nd = 126/8 = 15,75 ∈ [14;16]</span> ✓ ⟹ <span class="f">d = 15,75/6 = 21/8 = 2,625</span>.
+        Проверка: <span class="f">a<sub>1</sub> = 63/16</span>, сумма 63 ✓, уменьшение <span class="f">6·21/16 = 7,875 ∈ [7;8]</span> ✓.</li>
+    <li><b><span class="f">n = 7</span>:</b> <span class="f">nd = 126/9 = 14 ∈ [14;16]</span> ✓ ⟹ <span class="f">d = 2</span>, <span class="f">a<sub>1</sub> = 3</span>.
+        Прогрессия 3, 5, 7, 9, 11, 13, 15: сумма 63 ✓, уменьшение <span class="f">7·1 = 7</span> ✓.</li>
+  </ol>`,
+  answer:"2 или 21/8 (= 2,625)", check:{type:"num", values:[2, 2.625]}
+},
+{
+  id:"p11", diff:3, topic:"геометрическая + числа",
+  title:"Натуральные члены ГП",
+  source:"«Ломоносов»", year:"2010", grade:"", stage:"",
+  url:"https://mathus.ru/math/posled.pdf",
+  text:`<p>Числа <b>24</b> и <b>2187</b> являются членами геометрической прогрессии.
+        Найдите все натуральные числа, которые могут встретиться в этой прогрессии.</p>`,
+  placeholder:"Например: 24; 108; 486; 2187",
+  format:"Все числа — через точку с запятой (;), в любом порядке.",
+  hint:`<p>Разложите на множители: <span class="f">24 = 2<sup>3</sup>·3</span>, <span class="f">2187 = 3<sup>7</sup></span>. Если натуральный член равен <span class="f">x = 2<sup>u</sup>·3<sup>v</sup></span>, проследите, как меняются показатели. Величина <span class="f">2u+v</span> окажется одинаковой у всех натуральных членов!</p>`,
+  solution:`<ol>
+    <li>Пусть <span class="f">24 = b<sub>m</sub></span>, <span class="f">2187 = b<sub>n</sub></span>, <span class="f">j = n−m ≠ 0</span>.
+        Тогда <span class="f">q<sup>j</sup> = 2187/24 = 3<sup>6</sup>/2<sup>3</sup></span>.</li>
+    <li>Пусть <span class="f">x</span> — натуральный член, <span class="f">x = 24·q<sup>i</sup></span>. Возведём в степень <span class="f">j</span>:
+        <span class="f">x<sup>j</sup> = 24<sup>j</sup>·(q<sup>j</sup>)<sup>i</sup> = 2<sup>3j−3i</sup>·3<sup>j+6i</sup></span>.
+        В разложении <span class="f">x<sup>j</sup></span> только простые 2 и 3, значит и <span class="f">x = 2<sup>u</sup>·3<sup>v</sup></span>
+        с целыми <span class="f">u, v ≥ 0</span> (при <span class="f">j&lt;0</span> перейдём к <span class="f">x<sup>−j</sup></span> — вывод тот же).</li>
+    <li>Сравниваем показатели: <span class="f">uj = 3j−3i</span>, <span class="f">vj = j+6i</span>. Тогда
+        <span class="f">2uj + vj = (6j−6i) + (j+6i) = 7j</span>, то есть <b><span class="f">2u + v = 7</span></b> — инвариант!</li>
+    <li>Целые неотрицательные решения: <span class="f">(u,v) = (0,7), (1,5), (2,3), (3,1)</span>, что даёт
+        <span class="f">x = 2187, 486, 108, 24</span>.</li>
+    <li>Все четыре реализуются: прогрессия <b>24, 108, 486, 2187</b> со знаменателем <span class="f">q = 9/2</span>
+        (проверьте: каждое следующее в 4,5 раза больше). Другие натуральные числа появиться не могут.</li>
+  </ol>`,
+  answer:"24; 108; 486; 2187", check:{type:"num", values:[24, 108, 486, 2187]}
+},
+{
+  id:"p12", diff:3, topic:"АП + ГП",
+  title:"Три члена АП — члены ГП?",
+  source:"«Высшая проба»", year:"2016", grade:"11 класс", stage:"заключительный этап, 2 тур",
+  url:"https://www.reshuolymp.ru/problem?id=33",
+  text:`<p>Три различных положительных числа являются тремя последовательными членами арифметической прогрессии.
+        Могут ли эти же три числа оказаться тремя (<b>не обязательно последовательными</b>) членами геометрической прогрессии?
+        Ответьте «да» или «нет»; обоснуйте (пример или доказательство).</p>`,
+  placeholder:"да / нет",
+  format:"Введите «да» или «нет». Обоснование напишите в тетради, затем сверьте с решением.",
+  hint:`<p>Ищите пример среди членов ГП <span class="f">1, q, q<sup>2</sup>, q<sup>3</sup>, …</span>: пусть три числа — это <span class="f">1</span>, <span class="f">q</span> и <span class="f">q<sup>3</sup></span>. Условие «средний — среднее арифметическое крайних» даёт кубическое уравнение на <span class="f">q</span>. Один из корней связан с золотым сечением.</p>`,
+  solution:`<ol>
+    <li><b>Ответ: да, могут.</b> Построим пример. Возьмём ГП <span class="f">b<sub>k</sub> = q<sup>k−1</sup></span>:
+        числа <span class="f">1 = b<sub>1</sub></span>, <span class="f">q = b<sub>2</sub></span>, <span class="f">q<sup>3</sup> = b<sub>4</sub></span> — её члены (номера 1, 2, 4).</li>
+    <li>Они образуют АП (в этом порядке), если <span class="f">2q = 1 + q<sup>3</sup></span>, то есть
+        <span class="f">q<sup>3</sup> − 2q + 1 = 0</span>. Раскладываем: <span class="f">(q−1)(q<sup>2</sup>+q−1) = 0</span>.</li>
+    <li>Корень <span class="f">q = 1</span> даёт одинаковые числа — не подходит. Берём положительный корень уравнения
+        <span class="f">q<sup>2</sup>+q−1=0</span>: <span class="f">q = (√5−1)/2 ≈ 0,618</span> (золотое сечение!).</li>
+    <li>Проверка: из <span class="f">q<sup>2</sup> = 1−q</span> следует
+        <span class="f">q<sup>3</sup> = q·q<sup>2</sup> = q(1−q) = q − q<sup>2</sup> = q − (1−q) = 2q − 1</span>,
+        то есть <span class="f">1 + q<sup>3</sup> = 2q</span> ✓. Числа <span class="f">1 ≈ 1</span>, <span class="f">q ≈ 0,618</span>,
+        <span class="f">q<sup>3</sup> ≈ 0,236</span> различны, положительны и образуют убывающую АП с разностью <span class="f">q−1 ≈ −0,382</span>.</li>
+    <li>Замечание: с <i>последовательными</i> членами ГП так бы не вышло — из <span class="f">2q = 1+q<sup>2</sup></span> следует <span class="f">q=1</span>. Поэтому в примере и нужен «пропуск» <span class="f">b<sub>3</sub></span>.</li>
+  </ol>`,
+  answer:"да (пример: 1, q, q³ при q = (√5−1)/2)", check:{type:"yesno", yes:true}
+}
+];
+
+/* =====================================================================
+   СОСТОЯНИЕ (localStorage)
+   ===================================================================== */
+const STORE_KEY = "progressions-olympiad-v1";
+let state = {slide:0, p:{}};
+try{
+  const raw = localStorage.getItem(STORE_KEY);
+  if(raw){ const s = JSON.parse(raw); if(s && typeof s==="object"){ state = Object.assign(state, s); state.p = s.p || {}; } }
+}catch(e){}
+PROBLEMS.forEach(pr=>{ if(!state.p[pr.id]) state.p[pr.id] = {value:"", status:null, hint:false, sol:false}; });
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
+
+/* =====================================================================
+   ПРОВЕРКА ОТВЕТА
+   ===================================================================== */
+function parseNum(tok){
+  let t = String(tok).trim().toLowerCase().replace(/[−–]/g,"-").replace(/\s+/g,"");
+  if(!t) return null;
+  t = t.replace(",", ".");
+  let m = t.match(/^([+-]?\d+(?:\.\d+)?)\/([+-]?\d+(?:\.\d+)?)$/);
+  if(m){ const den = parseFloat(m[2]); if(!den) return null; return parseFloat(m[1])/den; }
+  if(/^[+-]?\d+(?:\.\d+)?$/.test(t)) return parseFloat(t);
+  return null;
+}
+function checkAnswer(pr, raw){
+  const s = String(raw).trim();
+  if(!s) return "empty";
+  if(pr.check.type === "yesno"){
+    const t = s.toLowerCase().replace(/[.!?]+$/,"").trim();
+    const yes = ["да","yes","могут","может","верно","+","true","ага"].includes(t);
+    const no  = ["нет","no","не могут","не может","неверно","-","false"].includes(t);
+    if(!yes && !no) return "unparsed";
+    return (yes === pr.check.yes) ? "correct" : "wrong";
+  }
+  const parts = s.split(/\s*;\s*|\s+или\s+/i).map(x=>x.trim()).filter(x=>x.length);
+  const vals = [];
+  for(const part of parts){ const v = parseNum(part); if(v === null) return "unparsed"; vals.push(v); }
+  const exp = pr.check.values;
+  if(vals.length !== exp.length) return "wrong";
+  const used = exp.map(()=>false);
+  for(const v of vals){
+    let hit = false;
+    for(let i=0;i<exp.length;i++){ if(!used[i] && Math.abs(v-exp[i])<1e-6){ used[i]=true; hit=true; break; } }
+    if(!hit) return "wrong";
+  }
+  return "correct";
+}
+
+/* =====================================================================
+   ПОСТРОЕНИЕ СЛАЙДОВ
+   ===================================================================== */
+const deck = document.getElementById("deck");
+const N_PROB = PROBLEMS.length;
+const FIRST_P = 2;                    // индекс первого слайда-задачи
+const SUMMARY = FIRST_P + N_PROB;     // индекс итогового слайда
+const TOTAL = SUMMARY + 1;
+
+function diffStars(d){ return "★".repeat(d) + "☆".repeat(3-d); }
+function diffName(d){ return d===1 ? "разминка" : d===2 ? "средний уровень" : "высокий уровень"; }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+function metaLine(pr){
+  const bits = [pr.year, pr.grade, pr.stage].filter(Boolean).join(" · ");
+  return bits;
+}
+
+/* --- слайд 0: титульный --- */
+function buildTitle(){
+  const el = document.createElement("section");
+  el.className = "slide"; el.id = "slide-0";
+  el.innerHTML = `
+  <div class="card">
+    <div class="kicker">Олимпиадный практикум · математика</div>
+    <h1>Прогрессии</h1>
+    <p class="subtitle">Арифметическая и геометрическая прогрессии в задачах перечневых олимпиад РСОШ</p>
+    <div class="chips">
+      <span class="tag">10–11 класс</span>
+      <span class="tag">12 задач</span>
+      <span class="tag t2">от разминки до заключительного этапа</span>
+    </div>
+    <div class="formula-strip">a<sub>n</sub> = a<sub>1</sub> + (n−1)d &nbsp;·&nbsp; b<sub>n</sub> = b<sub>1</sub>·q<sup>n−1</sup> &nbsp;·&nbsp; S = b<sub>1</sub>/(1−q)</div>
+    <p><b>Кого ждёт этот практикум:</b> задачи олимпиад «Покори Воробьёвы горы!», «Ломоносов», «Физтех»,
+       «Высшая проба» и ОММО — реальные условия прошлых лет, расположенные по возрастанию сложности.</p>
+    <ol class="howto">
+      <li>Прочитай условие и попробуй решить <b>в тетради</b> — олимпиада требует полного решения, а не только ответа.</li>
+      <li>Введи ответ и нажми <b>«Проверить»</b>.</li>
+      <li>Застрял — возьми <b>подсказку</b>. После честной попытки открой <b>решение</b> и сравни со своим.</li>
+      <li>На последнем слайде — таблица всех ответов и твой результат.</li>
+    </ol>
+    <p class="note">💾 Прогресс сохраняется в твоём браузере: можно закрыть страницу и вернуться позже. Никакие данные никуда не отправляются.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" data-go="1">Начать: памятка с формулами →</button>
+      <button class="btn btn-ghost" data-go="2">Сразу к задачам</button>
+    </div>
+  </div>`;
+  return el;
+}
+
+/* --- слайд 1: памятка --- */
+function buildTheory(){
+  const el = document.createElement("section");
+  el.className = "slide"; el.id = "slide-1";
+  el.innerHTML = `
+  <div class="card">
+    <div class="kicker">Перед стартом</div>
+    <h2 style="margin:6px 0 4px">Памятка: формулы и приёмы</h2>
+    <div class="theory-grid">
+      <div class="theory-card">
+        <h3>Арифметическая прогрессия (АП)</h3>
+        <ul>
+          <li><span class="f">a<sub>n</sub> = a<sub>1</sub> + (n−1)d</span></li>
+          <li><span class="f">S<sub>n</sub> = <span class="frac"><span>a<sub>1</sub>+a<sub>n</sub></span><span class="den">2</span></span>·n = n·a<sub>1</sub> + <span class="frac"><span>n(n−1)</span><span class="den">2</span></span>d</span></li>
+          <li>Характеристическое свойство: <span class="f">a<sub>n</sub> = <span class="frac"><span>a<sub>n−1</sub>+a<sub>n+1</sub></span><span class="den">2</span></span></span></li>
+          <li>Сумма <b>линейна по d</b>: при фиксированных n и a<sub>1</sub> замена d → kd увеличивает только «d-часть» суммы.</li>
+        </ul>
+      </div>
+      <div class="theory-card gp">
+        <h3>Геометрическая прогрессия (ГП)</h3>
+        <ul>
+          <li><span class="f">b<sub>n</sub> = b<sub>1</sub>·q<sup>n−1</sup></span>, все члены ≠ 0, <span class="f">q ≠ 0</span></li>
+          <li><span class="f">S<sub>n</sub> = b<sub>1</sub>·<span class="frac"><span>q<sup>n</sup>−1</span><span class="den">q−1</span></span></span> при <span class="f">q ≠ 1</span></li>
+          <li>Бесконечно убывающая (<span class="f">|q| &lt; 1</span>): <span class="f">S = <span class="frac"><span>b<sub>1</sub></span><span class="den">1−q</span></span></span></li>
+          <li>Характеристическое свойство: <span class="f">b<sub>n</sub><sup>2</sup> = b<sub>n−1</sub>·b<sub>n+1</sub></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="tricks">
+      <h3>Приёмы, которые сегодня сработают</h3>
+      <ul>
+        <li><b>Блоки.</b> Следующие k членов ГП — это предыдущие k, умноженные на <span class="f">q<sup>k</sup></span>: <span class="f">S<sub>2k</sub> = S<sub>k</sub>(1+q<sup>k</sup>)</span>.</li>
+        <li><b>Подпрогрессии.</b> Квадраты членов ГП — ГП со знаменателем <span class="f">q<sup>2</sup></span>; члены через один — со знаменателем <span class="f">q<sup>2</sup></span>.</li>
+        <li><b>Характеристическое свойство</b> переводит «три числа — ГП» в одно уравнение. Не забывайте про ненулевость членов и проверку корней.</li>
+        <li><b>Целочисленность.</b> Если n — количество членов, оно целое: оценки вроде <span class="f">n+2 ∈ [7,9]</span> решают задачу.</li>
+      </ul>
+    </div>
+    <div class="btn-row"><button class="btn btn-primary" data-go="2">К первой задаче →</button></div>
+  </div>`;
+  return el;
+}
+
+/* --- слайды задач --- */
+function buildProblem(pr, idx){
+  const slideIdx = FIRST_P + idx;
+  const st = state.p[pr.id];
+  const el = document.createElement("section");
+  el.className = "slide"; el.id = "slide-" + slideIdx;
+  const src = pr.url ? `<a href="${pr.url}" target="_blank" rel="noopener">${pr.source}</a>` : pr.source;
+  const inputMode = (pr.check.type === "yesno" || (pr.check.values || []).length > 1) ? "text" : "decimal";
+  el.innerHTML = `
+  <div class="card">
+    <div class="p-head">
+      <div class="p-num">${idx+1}</div>
+      <div class="p-meta">
+        <div class="p-source">${src}</div>
+        <div class="p-details">${metaLine(pr)}</div>
+      </div>
+      <div class="p-badges">
+        <span class="badge topic">${pr.topic}</span>
+        <span class="badge diff" title="${diffName(pr.diff)}">${diffStars(pr.diff)}</span>
+      </div>
+    </div>
+    <h2 class="p-title">${pr.title}</h2>
+    <div class="p-text">${pr.text}</div>
+
+    <div class="answer-box">
+      <label for="ans-${pr.id}">Твой ответ</label>
+      <div class="answer-row">
+        <input id="ans-${pr.id}" type="text" inputmode="${inputMode}" autocomplete="off"
+               placeholder="${esc(pr.placeholder)}" value="${esc(st.value)}">
+        <button class="btn btn-primary" data-check="${pr.id}">Проверить</button>
+      </div>
+      <div class="format-hint">${pr.format}</div>
+      <div class="feedback" id="fb-${pr.id}" role="status"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-hint" data-hint="${pr.id}">💡 Показать подсказку</button>
+      <button class="btn btn-sol" data-sol="${pr.id}">📖 Показать решение</button>
+    </div>
+
+    <div class="reveal hint-box" id="hint-${pr.id}">
+      <h4>Подсказка</h4>${pr.hint}
+    </div>
+    <div class="reveal sol-box" id="sol-${pr.id}">
+      <h4>Подробное решение</h4>${pr.solution}
+      <div class="final-answer">Ответ: ${pr.answer}</div>
+    </div>
+  </div>`;
+  return el;
+}
+
+/* --- итоговый слайд --- */
+function buildSummary(){
+  const el = document.createElement("section");
+  el.className = "slide"; el.id = "slide-" + SUMMARY;
+  el.innerHTML = `<div class="card" id="summaryCard"></div>`;
+  return el;
+}
+function renderSummary(){
+  const wrap = document.getElementById("summaryCard");
+  let correct = 0;
+  const rows = PROBLEMS.map((pr,i)=>{
+    const st = state.p[pr.id];
+    if(st.status === "correct") correct++;
+    let cls="none", txt="— не решалась";
+    if(st.status==="correct"){ cls="ok"; txt="✅ верно"; }
+    else if(st.status==="wrong"){ cls="bad"; txt="❌ пока неверно"; }
+    const seen = [st.hint?"подсказка":null, st.sol?"решение":null].filter(Boolean).join(", ");
+    return `<tr class="rowlink" data-go="${FIRST_P+i}">
+      <td>${i+1}</td>
+      <td><b>${pr.title}</b><br><span style="color:var(--muted);font-size:12.5px">${pr.source}, ${pr.year}</span></td>
+      <td class="ans-cell">${pr.answer}</td>
+      <td><span class="st ${cls}">${txt}</span>${seen?`<br><span class="seen">открыто: ${seen}</span>`:""}</td>
+    </tr>`;
+  }).join("");
+  wrap.innerHTML = `
+    <div class="kicker">Финиш</div>
+    <h2 style="margin:6px 0 4px">Итоги и все ответы</h2>
+    <div class="score-banner">
+      <div class="score-num">${correct} / ${N_PROB}</div>
+      <div>верных ответов.<br><span class="note">${correct===N_PROB ? "Блестяще! Все задачи решены. 🏆" :
+        correct>=8 ? "Отличный результат — до финала рукой подать!" :
+        correct>=4 ? "Хорошее начало! Разберите задачи с подсказками ещё раз." :
+        "Не страшно: вернитесь к задачам, читайте подсказки и решения вдумчиво."}</span></div>
+    </div>
+    <div class="table-wrap">
+    <table class="results">
+      <thead><tr><th>№</th><th>Задача и источник</th><th>Ответ</th><th>Твой статус</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    </div>
+    <p class="note" style="margin-top:8px">Нажмите на строку, чтобы вернуться к задаче.</p>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="continueBtn">К первой нерешённой →</button>
+      <button class="btn btn-ghost" id="printBtn">🖨 Версия для печати</button>
+      <button class="btn btn-ghost" id="resetBtn">Сбросить прогресс</button>
+    </div>
+    <details class="sources">
+      <summary>Источники задач и материалы</summary>
+      <ul>
+        <li>Условия и ответы сверены по открытым подборкам И.&nbsp;В.&nbsp;Яковлева (MathUs):
+          <a href="https://mathus.ru/math/posled.pdf" target="_blank" rel="noopener">«Последовательности»</a>,
+          <a href="https://mathus.ru/math/msuProgress.pdf" target="_blank" rel="noopener">«МГУ. Прогрессии»</a>.</li>
+        <li>«Высшая проба» — 2016, заключительный этап:
+          <a href="https://www.reshuolymp.ru/problem?id=33" target="_blank" rel="noopener">карточка задачи на РЕШУ ОЛИМП</a>;
+          официальные материалы — <a href="https://olymp.hse.ru/mmo/" target="_blank" rel="noopener">olymp.hse.ru</a>.</li>
+        <li>«Ломоносов» — 2012, очный тур:
+          <a href="http://olympiads.biz/forum/discussion/61/olimpiada-lomonosov-2011-2012-zadaniya-i-resheniya-ochnogo-tura-po-matematike" target="_blank" rel="noopener">разбор на Olympiads.biz</a>;
+          архив — <a href="https://olympiads.msu.ru/lomonosov/" target="_blank" rel="noopener">olympiads.msu.ru</a>.</li>
+        <li>«Покори Воробьёвы горы!» — <a href="https://pvg.mk.ru" target="_blank" rel="noopener">pvg.mk.ru</a>;
+          «Физтех» — <a href="https://olymp.mipt.ru" target="_blank" rel="noopener">olymp.mipt.ru</a>.</li>
+        <li>Подсказки и подробные решения написаны для этого практикума; все ответы проверены символьным решением
+          и подстановкой (скрипт <span class="f">tools/verify.py</span> в репозитории).</li>
+      </ul>
+    </details>`;
+  document.getElementById("continueBtn").addEventListener("click", ()=>{
+    const i = PROBLEMS.findIndex(pr=>state.p[pr.id].status!=="correct");
+    go(i === -1 ? 0 : FIRST_P + i);
+  });
+  document.getElementById("printBtn").addEventListener("click", ()=>window.print());
+  document.getElementById("resetBtn").addEventListener("click", ()=>{
+    if(confirm("Сбросить все ответы и прогресс?")){
+      PROBLEMS.forEach(pr=>{ state.p[pr.id]={value:"",status:null,hint:false,sol:false}; });
+      state.slide = 0; save();
+      PROBLEMS.forEach(pr=>{
+        const inp = document.getElementById("ans-"+pr.id);
+        inp.value=""; inp.classList.remove("ok","bad");
+        document.getElementById("fb-"+pr.id).textContent="";
+        document.getElementById("fb-"+pr.id).className="feedback";
+        document.getElementById("hint-"+pr.id).classList.remove("open");
+        document.getElementById("sol-"+pr.id).classList.remove("open");
+      });
+      updateSolvedChip(); go(0);
+    }
+  });
+}
+
+/* =====================================================================
+   СБОРКА И НАВИГАЦИЯ
+   ===================================================================== */
+deck.appendChild(buildTitle());
+deck.appendChild(buildTheory());
+PROBLEMS.forEach((pr,i)=>deck.appendChild(buildProblem(pr,i)));
+deck.appendChild(buildSummary());
+const slides = Array.from(deck.children);
+
+const jump = document.getElementById("jump");
+["Титульный слайд","Памятка: формулы"].forEach((t,i)=>{
+  const o = document.createElement("option"); o.value=i; o.textContent=t; jump.appendChild(o);
+});
+PROBLEMS.forEach((pr,i)=>{
+  const o = document.createElement("option"); o.value=FIRST_P+i;
+  o.textContent = `${i+1}. ${pr.title}`; jump.appendChild(o);
+});
+{ const o=document.createElement("option"); o.value=SUMMARY; o.textContent="Итоги и ответы"; jump.appendChild(o); }
+
+let current = 0;
+function go(i, skipHash){
+  current = Math.max(0, Math.min(TOTAL-1, i));
+  slides.forEach((s,k)=>s.classList.toggle("active", k===current));
+  document.getElementById("prevBtn").disabled = current===0;
+  document.getElementById("nextBtn").disabled = current===TOTAL-1;
+  document.getElementById("counter").textContent = (current+1)+" / "+TOTAL;
+  document.getElementById("progressFill").style.width = (current/(TOTAL-1)*100)+"%";
+  jump.value = current;
+  if(current === SUMMARY) renderSummary();
+  state.slide = current; save();
+  if(!skipHash){ try{ history.replaceState(null,"","#slide-"+current); }catch(e){ location.hash = "slide-"+current; } }
+  window.scrollTo(0,0);
+}
+document.getElementById("prevBtn").addEventListener("click", ()=>go(current-1));
+document.getElementById("nextBtn").addEventListener("click", ()=>go(current+1));
+jump.addEventListener("change", ()=>go(parseInt(jump.value,10)));
+
+/* делегированные клики: data-go, проверить, подсказка, решение */
+deck.addEventListener("click", (e)=>{
+  const goEl = e.target.closest("[data-go]");
+  if(goEl){ go(parseInt(goEl.dataset.go,10)); return; }
+  const chk = e.target.closest("[data-check]");
+  if(chk){ doCheck(chk.dataset.check); return; }
+  const h = e.target.closest("[data-hint]");
+  if(h){
+    const id = h.dataset.hint; const box = document.getElementById("hint-"+id);
+    const open = box.classList.toggle("open");
+    state.p[id].hint = state.p[id].hint || open; save();
+    h.textContent = open ? "💡 Скрыть подсказку" : "💡 Показать подсказку";
+    return;
+  }
+  const s = e.target.closest("[data-sol]");
+  if(s){
+    const id = s.dataset.sol; const box = document.getElementById("sol-"+id);
+    const open = box.classList.toggle("open");
+    state.p[id].sol = state.p[id].sol || open; save();
+    s.textContent = open ? "📖 Скрыть решение" : "📖 Показать решение";
+  }
+});
+deck.addEventListener("input", (e)=>{
+  if(e.target.matches("input[id^='ans-']")){
+    const id = e.target.id.slice(4);
+    state.p[id].value = e.target.value; save();
+  }
+});
+deck.addEventListener("keydown", (e)=>{
+  if(e.key==="Enter" && e.target.matches("input[id^='ans-']")){
+    e.preventDefault(); doCheck(e.target.id.slice(4));
+  }
+});
+
+function doCheck(id){
+  const pr = PROBLEMS.find(p=>p.id===id);
+  const inp = document.getElementById("ans-"+id);
+  const fb = document.getElementById("fb-"+id);
+  const res = checkAnswer(pr, inp.value);
+  inp.classList.remove("ok","bad"); fb.className="feedback";
+  if(res==="empty"){ fb.classList.add("warn"); fb.textContent="Сначала введите ответ 🙂"; return; }
+  if(res==="unparsed"){
+    fb.classList.add("warn");
+    fb.textContent = pr.check.type==="yesno" ? "Введите «да» или «нет»." :
+      "Не могу распознать ответ. Числа — как 13,5 или 27/2; несколько значений — через ;";
+    return;
+  }
+  state.p[id].value = inp.value;
+  state.p[id].status = res==="correct" ? "correct" : "wrong";
+  save(); updateSolvedChip();
+  if(res==="correct"){
+    inp.classList.add("ok"); fb.classList.add("ok");
+    fb.textContent = "✅ Верно! Отличная работа.";
+  }else{
+    inp.classList.add("bad"); fb.classList.add("bad");
+    fb.textContent = "Пока не сходится. Проверьте вычисления, возьмите подсказку — и попробуйте ещё раз.";
+  }
+}
+function updateSolvedChip(){
+  const n = PROBLEMS.filter(pr=>state.p[pr.id].status==="correct").length;
+  document.getElementById("solvedChip").textContent = `Верно: ${n} / ${N_PROB}`;
+}
+
+/* восстановление состояния задач */
+PROBLEMS.forEach(pr=>{
+  const st = state.p[pr.id];
+  const inp = document.getElementById("ans-"+pr.id);
+  const fb = document.getElementById("fb-"+pr.id);
+  if(st.status==="correct"){ inp.classList.add("ok"); fb.classList.add("ok"); fb.textContent="✅ Верно! Отличная работа."; }
+  else if(st.status==="wrong"){ inp.classList.add("bad"); fb.classList.add("bad"); fb.textContent="Пока не сходится. Попробуйте ещё раз или возьмите подсказку."; }
+  if(st.hint){ document.getElementById("hint-"+pr.id).classList.add("open");
+    document.querySelector(`[data-hint="${pr.id}"]`).textContent="💡 Скрыть подсказку"; }
+  if(st.sol){ document.getElementById("sol-"+pr.id).classList.add("open");
+    document.querySelector(`[data-sol="${pr.id}"]`).textContent="📖 Скрыть решение"; }
+});
+
+/* клавиатура */
+window.addEventListener("keydown",(e)=>{
+  const tag = (e.target.tagName||"").toLowerCase();
+  if(tag==="input"||tag==="select"||tag==="textarea") return;
+  if(e.key==="ArrowRight"||e.key==="PageDown"){ e.preventDefault(); go(current+1); }
+  else if(e.key==="ArrowLeft"||e.key==="PageUp"){ e.preventDefault(); go(current-1); }
+  else if(e.key==="Home"){ e.preventDefault(); go(0); }
+  else if(e.key==="End"){ e.preventDefault(); go(TOTAL-1); }
+});
+/* свайпы */
+let tX=null,tY=null;
+deck.addEventListener("touchstart",(e)=>{
+  if(e.target.closest("input,select,textarea,button,a")) { tX=null; return; }
+  tX=e.touches[0].clientX; tY=e.touches[0].clientY;
+},{passive:true});
+deck.addEventListener("touchend",(e)=>{
+  if(tX===null) return;
+  const dx=e.changedTouches[0].clientX-tX, dy=e.changedTouches[0].clientY-tY;
+  tX=null;
+  if(Math.abs(dx)>60 && Math.abs(dx)>1.6*Math.abs(dy)) go(current + (dx<0?1:-1));
+},{passive:true});
+window.addEventListener("hashchange",()=>{
+  const m = location.hash.match(/^#slide-(\d+)$/);
+  if(m) go(parseInt(m[1],10), true);
+});
+
+/* старт */
+updateSolvedChip();
+{
+  const m = location.hash.match(/^#slide-(\d+)$/);
+  const start = m ? parseInt(m[1],10) : (state.slide||0);
+  go(start, true);
+}
+</script>
+</body>
+</html>
