@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Урок 3 · Ответы для репетитора (К-3 и Д-3)</title>
+<style>
+  :root{
+    --paper:#FBF7EC; --grid:#C9D9E8; --red:#E2574C; --pencil:#2B2B2B;
+    --chalk:#2E5D4B; --sticky:#FFF3B0; --green:#1f7a4d;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:"Segoe Print","Comic Sans MS","Chalkboard SE",cursive;
+    color:var(--pencil);
+    background:
+      repeating-linear-gradient(0deg, transparent 0 27px, var(--grid) 27px 28px),
+      repeating-linear-gradient(90deg, transparent 0 27px, var(--grid) 27px 28px),
+      var(--paper);
+    min-height:100vh; padding:36px 16px 70px; line-height:1.7;
+  }
+  .page{
+    max-width:960px; margin:0 auto; background:var(--paper);
+    border-left:3px solid var(--red); border-right:1px solid #d8c9a8;
+    border-top:1px solid #d8c9a8; border-bottom:1px solid #d8c9a8;
+    box-shadow:8px 10px 0 rgba(0,0,0,.08), 0 24px 50px rgba(90,70,30,.18);
+    padding:38px 42px 46px 58px; position:relative;
+  }
+  .margin-line{position:absolute; top:0; bottom:0; left:34px; width:2px; background:rgba(226,87,76,.5);}
+
+  .date{text-align:right; font-size:14.5px; color:#8a7a5c; margin-bottom:6px;}
+  h1{
+    font-size:clamp(25px,4.2vw,38px); color:#1f4634; text-decoration:underline;
+    text-decoration-style:wavy; text-decoration-color:rgba(46,93,75,.5);
+    text-underline-offset:10px; margin-bottom:6px;
+  }
+  .topic{font-size:17px; color:#7c6a4b; margin-bottom:20px;}
+
+  h2{
+    font-size:clamp(20px,3vw,27px); color:var(--red); margin:34px 0 12px;
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  }
+  h2 .num{
+    display:inline-flex; background:var(--red); color:#fff; border-radius:10px;
+    min-width:38px; height:38px; padding:0 8px; align-items:center; justify-content:center;
+    font-size:18px; flex-shrink:0;
+  }
+
+  .notice{
+    background:#FFF3B0; border:2px dashed #d9b84a; border-radius:12px;
+    padding:16px 20px; font-size:15.5px; margin:14px 0 4px;
+    box-shadow:3px 4px 10px rgba(90,70,30,.18);
+  }
+  .notice b{color:#a13c2e;}
+
+  /* карточка задания */
+  .card{
+    background:rgba(255,255,255,.6); border:2px dashed #b9a97f; border-radius:14px;
+    padding:16px 22px; margin:14px 0; break-inside:avoid;
+  }
+  .card h3{font-size:19px; color:#1f4634; margin-bottom:6px;}
+  .card h3 .tag{
+    display:inline-block; background:#1f4634; color:#fff; border-radius:8px;
+    font-size:13px; padding:2px 10px; margin-right:8px; vertical-align:2px;
+  }
+  .a{font-size:17.5px; color:var(--red); font-weight:bold; margin:6px 0;}
+  .s{font-size:16px; color:#4a4030; margin-top:6px;}
+  .s b{color:#1f4634;}
+
+  /* таблица шкалы */
+  table{border-collapse:collapse; width:100%; margin:14px 0; font-size:16px; background:rgba(255,255,255,.6);}
+  th, td{border:2px solid #b9a97f; padding:9px 14px; text-align:left;}
+  th{background:#1f4634; color:#fff; font-size:15.5px;}
+  tr:nth-child(even) td{background:rgba(255,243,176,.35);}
+  td.mid{color:var(--red); font-weight:bold; white-space:nowrap;}
+
+  .errors{background:rgba(255,255,255,.6); border:2px dashed #b9a97f; border-radius:14px; padding:18px 24px; margin:14px 0;}
+  .errors li{margin:8px 0; font-size:16px;}
+
+  .sign{margin-top:34px; text-align:right; font-size:15.5px; color:#8a7a5c;}
+  footer{max-width:960px; margin:22px auto 0; text-align:center; color:#8a7a5c; font-size:13.5px;}
+
+  @media print{
+    body{background:#fff; padding:0;}
+    .page{box-shadow:none; border:none; max-width:none; padding:10px;}
+    .card{break-inside:avoid;}
+  }
+  @media (max-width:600px){
+    .page{padding:26px 16px 36px 40px;}
+    .margin-line{left:24px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="margin-line"></div>
+
+  <div class="date">Лист для репетитора · Урок 3 · К-3 и Д-3</div>
+  <h1>Ответы и оценивание</h1>
+  <div class="topic">Деление с остатком · подготовка к вступительным, 5-й класс</div>
+
+  <div class="notice">
+    📌 <b>Как пользоваться:</b> сначала ученик работает самостоятельно в презентации, потом — проверка по этому листу.
+    Типичные ошибки разбираем на уроке 4. Проверка каждого равенства: делитель · частное + остаток = делимое.
+  </div>
+
+  <!-- ============ ОЦЕНИВАНИЕ ============ -->
+  <h2><span class="num">★</span>Как считать результат (максимум 20 баллов)</h2>
+  <table>
+    <tr><th>Задания</th><th>Баллы</th><th>Сумма</th></tr>
+    <tr><td>1а–к (разминка) — по 0,5 балла</td><td class="mid">5</td><td class="mid">5</td></tr>
+    <tr><td>2–11 (часть 1) — по 1 баллу</td><td class="mid">10</td><td class="mid">15</td></tr>
+    <tr><td>12–16 (часть 2, на конкурс) — по 1 баллу</td><td class="mid">5</td><td class="mid">20</td></tr>
+    <tr><td>17 (бонус) — не оценивается</td><td class="mid">—</td><td class="mid">20</td></tr>
+  </table>
+
+  <table>
+    <tr><th>Шкала</th><th>Что означает</th></tr>
+    <tr><td class="mid">18–20</td><td>Деление с остатком автоматизировано; переходите к признакам делимости и НОК/НОД (урок 4).</td></tr>
+    <tr><td class="mid">14–17</td><td>База крепкая; пробелы — в обратных задачах (5) или переборе делителей (11): вернуться к памятке.</td></tr>
+    <tr><td class="mid">8–13</td><td>Делит с остатком, но путается в обратных операциях: добавить занятие, решать с проговариванием.</td></tr>
+    <tr><td class="mid">0–7</td><td>Вернуться к таблице умножения и делению нацело; работать вместе, вслух, с проверкой умножением.</td></tr>
+  </table>
+
+  <!-- ============ КЛАССНАЯ РАБОТА ============ -->
+  <h2><span class="num">К</span>Классная работа (К-3): ответы и решения</h2>
+
+  <div class="card">
+    <h3><span class="tag">1</span>Разминка · устный счёт</h3>
+    <div class="a">Ответ: а) 6 ост 1 · б) 7 ост 3 · в) 7 ост 5 · г) 11 ост 1 · д) 87 ост 1 · е) 41 ост 2 · ж) 404 ост 4 · з) 4 ост 0 · и) 11 ост 0 · к) 7 ост 4</div>
+    <div class="s">Решение: 25:4 = 6 ост 1 (4·6 = 24); 38:5 = 7 ост 3 (5·7 = 35); 47:6 = 7 ост 5 (6·7 = 42); 100:9 = 11 ост 1 (9·11 = 99); 610:7 = 87 ост 1 (7·87 = 609); 125:3 = 41 ост 2 (3·41 = 123); 2024:5 = 404 ост 4 (5·404 = 2020); 100:25 = 4 ост 0; 99:9 = 11 ост 0; 67:9 = 7 ост 4 (9·7 = 63).</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">2</span>Частное и остаток</h3>
+    <div class="a">Ответ: а) 36 ост 1 · б) 120 ост 1</div>
+    <div class="s">Решение: а) 7·36 = 252; 253 − 252 = 1 → 36 ост 1. б) 12·120 = 1440; 1441 − 1440 = 1 → 120 ост 1.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">3</span>Найдите делимое</h3>
+    <div class="a">Ответ: а) 373 · б) 411</div>
+    <div class="s">Решение: а) 14·26 = 364; 364 + 9 = 373. б) 23·17 = 391; 391 + 20 = 411. Обратная операция: делитель · частное + остаток.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">4</span>Задуманное число</h3>
+    <div class="a">Ответ: а) 113 · б) 284</div>
+    <div class="s">Решение: а) 9·12 + 5 = 108 + 5 = 113. б) 15·18 + 14 = 270 + 14 = 284.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">5</span>Обратные задачи</h3>
+    <div class="a">Ответ: а) 78 · б) 112</div>
+    <div class="s">Решение: а) 17·36 = 612; 612 + 12 = 624; 624 : 8 = 78. б) 13·51 = 663; 663 + 9 = 672; 672 : 6 = 112. Проверка: 78·8 = 624 = 17·36 + 12; 112·6 = 672 = 13·51 + 9. <b>Ключ:</b> «увеличили в n раз, разделили на m» — сначала восстанавливаем умноженное число, потом делим.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">6</span>Остатки числа 610</h3>
+    <div class="a">Ответ: а) 7 · б) 5</div>
+    <div class="s">Решение: а) 610 = 9·67 + 7 (9·67 = 603), остаток 7. б) 610 = 11·55 + 5 (11·55 = 605), остаток 5.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">7</span>Количество чисел</h3>
+    <div class="a">Ответ: а) 15 · б) 14</div>
+    <div class="s">Решение: а) числа 2, 9, 16, …, 100: 2 + 7k ≤ 100 → k ≤ 14 → 15 чисел. б) числа 7, 14, …, 98: 14 чисел. Приём: выписать начало и конец, посчитать по формуле — не перебирать каждое число.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">8</span>Наименьшие числа</h3>
+    <div class="a">Ответ: а) 105 · б) 103 · в) 201</div>
+    <div class="s">Решение: а) 7·15 = 105 (7·14 = 98 &lt; 100). б) 12·8 + 7 = 96 + 7 = 103 (12·7 + 7 = 91 &lt; 100). в) 11·18 + 3 = 198 + 3 = 201 (11·17 + 3 = 190 &lt; 201).</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">9</span>Практические задачи</h3>
+    <div class="a">Ответ: а) 50 контейнеров, 10 яиц · б) 14 пакетов, 1 кг</div>
+    <div class="s">Решение: а) 610 = 12·50 + 10 → 50 полных контейнеров и 10 яиц. б) 57 = 4·14 + 1 → 14 полных пакетов и 1 кг.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">10</span>Границы остатка</h3>
+    <div class="a">Ответ: а) 14 · б) наибольшее 95, наименьшее 72</div>
+    <div class="s">Решение: а) Остаток всегда меньше делителя: наибольший остаток = 15 − 1 = 14. б) Делимое = 24·3 + r, где 0 ≤ r ≤ 23: наименьшее 24·3 + 0 = 72, наибольшее 24·3 + 23 = 95.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">11</span>Перебор делителей</h3>
+    <div class="a">Ответ: а) 3, 4, 6, 8, 12, 24 · б) 3, 5, 9, 15, 45</div>
+    <div class="s">Решение: а) b·q = 26 − 2 = 24, причём b &gt; 2 (остаток 2 меньше делителя): делители числа 24, большие 2, — 3, 4, 6, 8, 12, 24. б) b·q = 47 − 2 = 45, b &gt; 2: 3, 5, 9, 15, 45. <b>Обязательное условие: делитель больше остатка.</b></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">12</span>На конкурс · два остатка</h3>
+    <div class="a">Ответ: 18</div>
+    <div class="s">Решение: Перебор чисел с остатком 4 при делении на 7: 4, 11, 18 — и проверяем остаток при делении на 5: 18 = 5·3 + 3 — подходит.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">13</span>На конкурс · остаток от 20252025</h3>
+    <div class="a">Ответ: 0</div>
+    <div class="s">Решение: Число делится на 9 без остатка тогда и только тогда, когда сумма его цифр делится на 9: 2 + 0 + 2 + 5 + 2 + 0 + 2 + 5 = 18; 18 : 9 = 2. Значит, остаток равен 0.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">14</span>На конкурс · остаток при делении на 3</h3>
+    <div class="a">Ответ: 1</div>
+    <div class="s">Решение: Число = 6k + 4. При делении на 3: 6k делится на 3, остаётся 4 = 3·1 + 1. Остаток 1.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">15</span>На конкурс · остаток 1 при 2, 3 и 4</h3>
+    <div class="a">Ответ: 13</div>
+    <div class="s">Решение: Наименьшее общее кратное 2, 3 и 4 — число 12; значит, искомое число больше на 1: 12 + 1 = 13. Проверка: 13 : 2 = 6 ост 1; 13 : 3 = 4 ост 1; 13 : 4 = 3 ост 1.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">16</span>На конкурс · сколько чисел</h3>
+    <div class="a">Ответ: 47</div>
+    <div class="s">Решение: Искомые числа: 3, 16, 29, … : 3 + 13k ≤ 610 → k ≤ 46 (3 + 13·46 = 601 ≤ 610). k пробегает значения от 0 до 46 — всего 47 чисел.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">17</span>Бонус · доски (не оценивается)</h3>
+    <div class="a">Ответ: 23 доски</div>
+    <div class="s">Решение: Из доски 4 м = 400 см получается 400 : 75 = 5 (ост 25) — 5 досок по 75 см. 112 : 5 = 22 (ост 2) — 22 доски дадут только 110 заготовок, нужна ещё одна: 23 доски. Проверка: 23·5 = 115 ≥ 112. Делить общую длину на длину одной доски НЕЛЬЗЯ: отходы по 25 см не стыкуются (Михлин, §6.8–6.9).</div>
+  </div>
+
+  <!-- ============ ДОМАШНЯЯ РАБОТА ============ -->
+  <h2><span class="num">Д</span>Домашняя работа (Д-3): ответы и решения</h2>
+
+  <div class="card">
+    <h3><span class="tag">1</span>Разминка · устный счёт</h3>
+    <div class="a">Ответ: а) 6 ост 3 · б) 6 ост 4 · в) 9 ост 1 · г) 14 ост 2 · д) 76 ост 2 · е) 43 ост 1 · ж) 506 ост 0 · з) 16 ост 0 · и) 8 ост 4 · к) 10 ост 0</div>
+    <div class="s">Решение: 27:4 = 6 ост 3 (4·6 = 24); 46:7 = 6 ост 4 (7·6 = 42); 55:6 = 9 ост 1 (6·9 = 54); 100:7 = 14 ост 2 (7·14 = 98); 610:8 = 76 ост 2 (8·76 = 608); 130:3 = 43 ост 1 (3·43 = 129); 2024:4 = 506 ост 0; 144:9 = 16 ост 0; 76:9 = 8 ост 4 (9·8 = 72); 610:61 = 10 ост 0.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">2</span>Частное и остаток</h3>
+    <div class="a">Ответ: а) 45 ост 2 · б) 121 ост 5</div>
+    <div class="s">Решение: а) 7·45 = 315; 317 − 315 = 2 → 45 ост 2. б) 12·121 = 1452; 1457 − 1452 = 5 → 121 ост 5.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">3</span>Найдите делимое</h3>
+    <div class="a">Ответ: а) 371 · б) 427</div>
+    <div class="s">Решение: а) 15·24 = 360; 360 + 11 = 371. б) 27·15 = 405; 405 + 22 = 427.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">4</span>Задуманное число</h3>
+    <div class="a">Ответ: а) 115 · б) 287</div>
+    <div class="s">Решение: а) 8·14 + 3 = 112 + 3 = 115. б) 18·15 + 17 = 270 + 17 = 287.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">5</span>Обратные задачи</h3>
+    <div class="a">Ответ: а) 75 · б) 82</div>
+    <div class="s">Решение: а) 16·42 = 672; 672 + 3 = 675; 675 : 9 = 75. б) 13·44 = 572; 572 + 2 = 574; 574 : 7 = 82. Проверка: 75·9 = 675 = 16·42 + 3; 82·7 = 574 = 13·44 + 2.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">6</span>Остатки числа 610</h3>
+    <div class="a">Ответ: а) 1 · б) 2</div>
+    <div class="s">Решение: а) 610 = 7·87 + 1 (7·87 = 609), остаток 1. б) 610 = 8·76 + 2 (8·76 = 608), остаток 2.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">7</span>Количество чисел</h3>
+    <div class="a">Ответ: а) 17 · б) 16</div>
+    <div class="s">Решение: а) числа 3, 9, 15, …, 99: 3 + 6k ≤ 100 → k ≤ 16 → 17 чисел. б) числа 6, 12, …, 96: 16 чисел.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">8</span>Наименьшие числа</h3>
+    <div class="a">Ответ: а) 108 · б) 101 · в) 303</div>
+    <div class="s">Решение: а) 9·12 = 108 (9·11 = 99 &lt; 100). б) 12·8 + 5 = 96 + 5 = 101 (12·7 + 5 = 89 &lt; 100). в) 13·23 + 4 = 299 + 4 = 303 (13·22 + 4 = 290 &lt; 303).</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">9</span>Практические задачи</h3>
+    <div class="a">Ответ: а) 40 контейнеров, 10 яиц · б) 12 пакетов, 3 кг</div>
+    <div class="s">Решение: а) 610 = 15·40 + 10 → 40 полных контейнеров и 10 яиц. б) 63 = 5·12 + 3 → 12 полных пакетов и 3 кг.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">10</span>Границы остатка</h3>
+    <div class="a">Ответ: а) 16 · б) наибольшее 124, наименьшее 100</div>
+    <div class="s">Решение: а) Остаток меньше делителя: наибольший остаток = 17 − 1 = 16. б) Делимое = 25·4 + r, где 0 ≤ r ≤ 24: наименьшее 100, наибольшее 124.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">11</span>Перебор делителей</h3>
+    <div class="a">Ответ: а) 5, 7, 35 · б) 23, 46</div>
+    <div class="s">Решение: а) b·q = 38 − 3 = 35, причём b &gt; 3: делители числа 35, большие 3, — 5, 7, 35. б) b·q = 50 − 4 = 46, b &gt; 4: 23, 46.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">12</span>На конкурс · два остатка</h3>
+    <div class="a">Ответ: 28</div>
+    <div class="s">Решение: Числа с остатком 3 при делении на 5: 3, 8, 13, 18, 23, 28 — проверяем остаток при делении на 6: 28 = 6·4 + 4 — подходит.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">13</span>На конкурс · остаток от 20251025</h3>
+    <div class="a">Ответ: 8</div>
+    <div class="s">Решение: Сумма цифр: 2 + 0 + 2 + 5 + 1 + 0 + 2 + 5 = 17; 17 = 9·1 + 8. Остаток от деления на 9 равен 8.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">14</span>На конкурс · остаток при делении на 4</h3>
+    <div class="a">Ответ: 1</div>
+    <div class="s">Решение: Число = 8k + 5. При делении на 4: 8k делится на 4, остаётся 5 = 4·1 + 1. Остаток 1.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">15</span>На конкурс · остаток 2 при 3, 4 и 5</h3>
+    <div class="a">Ответ: 62</div>
+    <div class="s">Решение: НОК(3, 4, 5) = 60; искомое число на 2 больше: 60 + 2 = 62. Проверка: 62 = 3·20 + 2; 62 = 4·15 + 2; 62 = 5·12 + 2.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">16</span>На конкурс · сколько чисел</h3>
+    <div class="a">Ответ: 56</div>
+    <div class="s">Решение: Искомые числа: 5, 16, 27, …, 610: 5 + 11k ≤ 610 → k ≤ 55 (5 + 11·55 = 610). Значений k от 0 до 55 — всего 56 чисел.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="tag">17</span>Бонус · доски (не оценивается)</h3>
+    <div class="a">Ответ: 18 досок</div>
+    <div class="s">Решение: Из доски 6 м = 600 см получается 600 : 80 = 7 (ост 40) — 7 досок по 80 см. 120 : 7 = 17 (ост 1) — 17 досок дадут только 119 заготовок, нужна ещё одна: 18 досок. Проверка: 18·7 = 126 ≥ 120 (Михлин, §6.9).</div>
+  </div>
+
+  <!-- ============ ТИПИЧНЫЕ ОШИБКИ ============ -->
+  <h2><span class="num">!</span>Типичные ошибки · разбор урока 4</h2>
+  <div class="errors">
+    <ul>
+      <li>Остаток сравнивают с делимым вместо делителя: напоминание — <b>остаток всегда меньше делителя</b>.</li>
+      <li>Проверяйте обратными операциями сразу: делитель · частное + остаток = делимое (задания 3, 4, 5).</li>
+      <li>«Увеличили в n раз» читают как «увеличили на n» — главная ошибка в задании 5.</li>
+      <li>При переборе делителей (11) забывают условие «делитель больше остатка».</li>
+      <li>В обратных задачах (11б) помнят только про кратность, но не про границу остатка.</li>
+      <li>Задачи «сколько нужно купить / построить» решают делением общей длины на вместимость и получают на 1 меньше: частное с остатком → «+1», если остаток ≠ 0 (задание 17, Михлин §6.8).</li>
+      <li>Урок 4: делимость, НОК и НОД, признаки делимости, десятки и дюжины (стиль экзамена 2024, про яйца).</li>
+    </ul>
+  </div>
+
+  <div class="sign">Урок 3 · Ответы и оценивание · для репетитора</div>
+</div>
+
+<footer>Урок 3 · Деление с остатком · ответы к вариантам К-3 и Д-3</footer>
+
+</body>
+</html>
